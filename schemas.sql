@@ -1,4 +1,4 @@
--- Rode no SQL Editor do Neon
+-- Rode no SQL Editor do Neon (livros digitais: sem estoque, leitura liberada após a compra)
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   name VARCHAR(120) NOT NULL,
@@ -12,9 +12,9 @@ CREATE TABLE books (
   author VARCHAR(160) NOT NULL,
   category VARCHAR(60) NOT NULL,
   price NUMERIC(10,2) NOT NULL CHECK (price > 0),
-  stock INT NOT NULL DEFAULT 0 CHECK (stock >= 0),
   synopsis TEXT,
-  cover_url TEXT NULL,            -- NULL = livro sem capa
+  cover_url TEXT NULL,      -- NULL = livro sem capa
+  file_url TEXT NULL,       -- arquivo (PDF) liberado só para quem comprou
   created_at TIMESTAMPTZ DEFAULT now()
 );
 CREATE TABLE orders (
@@ -27,9 +27,16 @@ CREATE TABLE order_items (
   id SERIAL PRIMARY KEY,
   order_id INT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
   book_id INT REFERENCES books(id) ON DELETE SET NULL,
-  title VARCHAR(200) NOT NULL,     -- guarda o título/preço da época da compra
-  unit_price NUMERIC(10,2) NOT NULL,
-  quantity INT NOT NULL CHECK (quantity > 0)
+  title VARCHAR(200) NOT NULL,        -- título e preço da época da compra
+  unit_price NUMERIC(10,2) NOT NULL
+);
+-- Biblioteca do leitor: quem comprou pode ler
+CREATE TABLE user_books (
+  user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  book_id INT NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+  order_id INT REFERENCES orders(id) ON DELETE SET NULL,
+  purchased_at TIMESTAMPTZ DEFAULT now(),
+  PRIMARY KEY (user_id, book_id)      -- impede comprar o mesmo livro duas vezes
 );
 CREATE TABLE reviews (
   id SERIAL PRIMARY KEY,
