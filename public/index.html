@@ -1,1152 +1,302 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumina Livros | Sua Biblioteca & Livraria Digital</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        parchment: {
-                            50: '#FAF7F2',
-                            100: '#F3ECE0',
-                            200: '#E6D7C3',
-                            300: '#D4C1A5',
-                            400: '#C2AA86',
-                        },
-                        wood: {
-                            950: '#170D08',
-                            900: '#28160E',
-                            800: '#3D2216',
-                            700: '#563120',
-                            600: '#73432B',
-                            500: '#8C5A2B',
-                            200: '#D9C8B5',
-                            100: '#EFE6DC'
-                        },
-                        amber: {
-                            800: '#92400E',
-                            700: '#B45309',
-                            600: '#D97706',
-                            500: '#F59E0B',
-                            100: '#FEF3C7'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Lora', 'Georgia', 'serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <!-- Google Fonts: Inter & Lora -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Alpine.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #FAF7F2;
-            color: #28160E;
-        }
-        .bg-library-pattern {
-            background-color: #FAF7F2;
-            background-image: radial-gradient(#D4C1A5 0.8px, transparent 0.8px), radial-gradient(#D4C1A5 0.8px, #FAF7F2 0.8px);
-            background-size: 32px 32px;
-            background-position: 0 0, 16px 16px;
-        }
-        .glass-panel {
-            background: rgba(253, 251, 247, 0.88);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(212, 193, 165, 0.6);
-            box-shadow: 0 4px 20px -2px rgba(40, 22, 14, 0.05);
-        }
-        .glass-card {
-            background: #FFFFFF;
-            backdrop-filter: blur(8px);
-            border: 1px solid #E6D7C3;
-            box-shadow: 0 2px 12px -2px rgba(61, 34, 22, 0.06);
-        }
-        .glass-card:hover {
-            border-color: #B45309;
-            box-shadow: 0 10px 25px -5px rgba(61, 34, 22, 0.12);
-        }
-        /* Custom Scrollbar for Library Theme */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #FAF7F2;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #D4C1A5;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #8C5A2B;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumina Livros | Sua Biblioteca & Livraria Digital</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={theme:{extend:{colors:{
+parchment:{50:'#FAF7F2',100:'#F3ECE0',200:'#E6D7C3',300:'#D4C1A5'},
+wood:{950:'#170D08',900:'#28160E',800:'#3D2216',700:'#563120',600:'#73432B',500:'#8C5A2B',400:'#A8927A',300:'#C9B49A',200:'#D9C8B5',100:'#EFE6DC'},
+amber:{800:'#92400E',700:'#B45309',600:'#D97706',500:'#F59E0B',100:'#FEF3C7'}},
+fontFamily:{sans:['Inter','sans-serif'],serif:['Lora','Georgia','serif']}}}}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<style type="text/tailwindcss">
+.btn{@apply px-4 py-2.5 rounded-xl bg-wood-900 hover:bg-wood-800 text-amber-100 font-bold text-xs border border-wood-700 transition inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed}
+.btn2{@apply px-4 py-2.5 rounded-xl bg-white hover:bg-parchment-100 text-wood-900 font-bold text-xs border border-wood-300 transition inline-flex items-center justify-center gap-2}
+.inp{@apply w-full bg-parchment-50 border border-wood-300 rounded-xl px-3.5 py-2.5 text-xs text-wood-900 focus:outline-none focus:border-amber-600}
+.card{@apply bg-white border border-wood-200 rounded-2xl shadow-sm}
+.modal{@apply fixed inset-0 z-50 flex items-center justify-center p-4 bg-wood-950/60}
+</style>
+<style>
+[x-cloak]{display:none!important}
+body{font-family:Inter,sans-serif;color:#28160E;background-color:#FAF7F2;background-image:radial-gradient(#D4C1A5 .8px,transparent .8px);background-size:32px 32px}
+</style>
 </head>
-<body x-data="storeApp()" x-init="initApp()" class="min-h-screen flex flex-col justify-between selection:bg-amber-100 selection:text-wood-900 bg-library-pattern">
+<body x-data="storeApp()" x-init="init()" class="min-h-screen flex flex-col">
 
-    <!-- HEADER / NAVIGATION -->
-    <header class="sticky top-0 z-40 glass-panel border-b border-wood-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3 cursor-pointer" @click="currentTab = 'home'">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-wood-900 via-wood-800 to-amber-700 flex items-center justify-center text-amber-100 shadow-md shadow-wood-900/20">
-                        <i class="fa-solid fa-book-bookmark text-xl"></i>
-                    </div>
-                    <div>
-                        <span class="text-2xl font-serif font-bold tracking-tight text-wood-900">Lumina</span>
-                        <span class="text-[10px] font-bold text-amber-700 block -mt-1 tracking-widest uppercase">Biblioteca & Livraria</span>
-                    </div>
-                </div>
-
-                <!-- Desktop Navigation Links -->
-                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
-                    <button @click="currentTab = 'home'" :class="currentTab === 'home' ? 'text-amber-800 bg-wood-100 font-bold border-wood-300' : 'text-wood-700 hover:text-wood-900 hover:bg-parchment-100'" class="px-4 py-2 rounded-lg font-medium text-sm transition-all border border-transparent">
-                        <i class="fa-solid fa-house mr-1.5 text-xs text-amber-700"></i> Início
-                    </button>
-                    <button @click="currentTab = 'catalog'" :class="currentTab === 'catalog' ? 'text-amber-800 bg-wood-100 font-bold border-wood-300' : 'text-wood-700 hover:text-wood-900 hover:bg-parchment-100'" class="px-4 py-2 rounded-lg font-medium text-sm transition-all border border-transparent">
-                        <i class="fa-solid fa-book-open mr-1.5 text-xs text-amber-700"></i> Acervo / Catálogo
-                    </button>
-                    <button @click="currentTab = 'community'" :class="currentTab === 'community' ? 'text-amber-800 bg-wood-100 font-bold border-wood-300' : 'text-wood-700 hover:text-wood-900 hover:bg-parchment-100'" class="px-4 py-2 rounded-lg font-medium text-sm transition-all border border-transparent">
-                        <i class="fa-solid fa-comments mr-1.5 text-xs text-amber-700"></i> Avaliações & Dúvidas
-                    </button>
-                    <button @click="currentTab = 'admin'" :class="currentTab === 'admin' ? 'text-amber-800 bg-wood-100 font-bold border-wood-300' : 'text-wood-700 hover:text-wood-900 hover:bg-parchment-100'" class="px-4 py-2 rounded-lg font-medium text-sm transition-all border border-transparent">
-                        <i class="fa-solid fa-sliders mr-1.5 text-xs text-amber-700"></i> Gestão de Vendas
-                    </button>
-                </nav>
-
-                <!-- Header Actions -->
-                <div class="flex items-center space-x-3 sm:space-x-4">
-                    <!-- Cart Button -->
-                    <button @click="toggleCart()" class="relative p-2.5 rounded-xl bg-white hover:bg-parchment-100 text-wood-800 transition-all border border-wood-200 shadow-sm">
-                        <i class="fa-solid fa-basket-shopping text-lg"></i>
-                        <span x-show="cartTotalCount > 0" x-text="cartTotalCount" class="absolute -top-1.5 -right-1.5 bg-amber-700 text-white font-bold text-xs w-5 h-5 rounded-full flex items-center justify-center animate-pulse"></span>
-                    </button>
-
-                    <!-- Auth Button -->
-                    <template x-if="!currentUser">
-                        <button @click="openAuthModal('login')" class="px-4 py-2 rounded-xl bg-wood-900 hover:bg-wood-800 text-amber-100 font-semibold text-sm shadow-md shadow-wood-900/10 transition-all flex items-center gap-2 border border-wood-700">
-                            <i class="fa-regular fa-user"></i>
-                            <span class="hidden sm:inline">Entrar / Cadastrar</span>
-                        </button>
-                    </template>
-                    <template x-if="currentUser">
-                        <div class="relative" x-data="{ open: false }">
-                            <button @click="open = !open" class="flex items-center gap-2 bg-white border border-wood-200 px-3 py-1.5 rounded-xl text-sm font-medium hover:bg-parchment-100 transition shadow-sm">
-                                <div class="w-7 h-7 rounded-full bg-wood-900 text-amber-100 font-bold flex items-center justify-center text-xs" x-text="currentUser.name.charAt(0)"></div>
-                                <span class="hidden sm:inline text-wood-900 max-w-[100px] truncate" x-text="currentUser.name"></span>
-                                <i class="fa-solid fa-chevron-down text-xs text-wood-600"></i>
-                            </button>
-                            
-                            <div x-show="open" @click.outside="open = false" x-transition class="absolute right-0 mt-2 w-48 bg-white border border-wood-200 rounded-xl shadow-xl py-2 z-50">
-                                <div class="px-4 py-2 border-b border-wood-100">
-                                    <p class="text-xs text-wood-800 font-semibold" x-text="currentUser.email"></p>
-                                    <span class="text-[10px] px-2 py-0.5 rounded bg-amber-100 text-amber-800 uppercase font-bold" x-text="currentUser.role"></span>
-                                </div>
-                                <button @click="currentTab = 'admin'; open = false" class="w-full text-left px-4 py-2 text-sm text-wood-700 hover:bg-parchment-100 hover:text-wood-900 flex items-center gap-2">
-                                    <i class="fa-solid fa-sliders text-xs"></i> Painel de Controle
-                                </button>
-                                <button @click="logout(); open = false" class="w-full text-left px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 flex items-center gap-2">
-                                    <i class="fa-solid fa-right-from-bracket text-xs"></i> Sair
-                                </button>
-                            </div>
-                        </div>
-                    </template>
-
-                    <!-- Mobile Menu Button -->
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-xl text-wood-800 hover:bg-parchment-100">
-                        <i class="fa-solid" :class="mobileMenuOpen ? 'fa-xmark text-xl' : 'fa-bars text-xl'"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Navigation Menu -->
-        <div x-show="mobileMenuOpen" x-transition class="md:hidden bg-white border-b border-wood-200 px-4 pt-2 pb-4 space-y-2">
-            <button @click="currentTab = 'home'; mobileMenuOpen = false" class="w-full text-left px-4 py-2.5 rounded-lg text-wood-800 hover:bg-parchment-100 flex items-center gap-3 font-medium">
-                <i class="fa-solid fa-house text-amber-700"></i> Início
-            </button>
-            <button @click="currentTab = 'catalog'; mobileMenuOpen = false" class="w-full text-left px-4 py-2.5 rounded-lg text-wood-800 hover:bg-parchment-100 flex items-center gap-3 font-medium">
-                <i class="fa-solid fa-book-open text-amber-700"></i> Acervo / Catálogo
-            </button>
-            <button @click="currentTab = 'community'; mobileMenuOpen = false" class="w-full text-left px-4 py-2.5 rounded-lg text-wood-800 hover:bg-parchment-100 flex items-center gap-3 font-medium">
-                <i class="fa-solid fa-comments text-amber-700"></i> Avaliações & Dúvidas
-            </button>
-            <button @click="currentTab = 'admin'; mobileMenuOpen = false" class="w-full text-left px-4 py-2.5 rounded-lg text-wood-800 hover:bg-parchment-100 flex items-center gap-3 font-medium">
-                <i class="fa-solid fa-sliders text-amber-700"></i> Gestão de Vendas
-            </button>
-        </div>
-    </header>
-
-    <!-- MAIN CONTENT CONTAINER -->
-    <main class="flex-grow relative">
-
-        <!-- TAB 1: HOME LANDING PAGE -->
-        <section x-show="currentTab === 'home'" x-transition class="space-y-16 py-8">
-            <!-- Hero Section -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100 border border-amber-300 text-amber-800 text-xs font-bold uppercase tracking-wider">
-                            <i class="fa-solid fa-feather-pointed text-amber-700"></i> Experiência de Leitura Clássica
-                        </div>
-                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-wood-900 leading-tight">
-                            Descubra Obras na Sua <span class="bg-gradient-to-r from-amber-700 via-amber-600 to-wood-800 bg-clip-text text-transparent">Biblioteca Lumina</span>
-                        </h1>
-                        <p class="text-wood-700 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
-                            Uma plataforma feita para leitores apaixonados por livros. Cadastre títulos, organize vendas e acompanhe novas edições em um ambiente acolhedor e seguro.
-                        </p>
-                        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
-                            <button @click="currentTab = 'catalog'" class="px-8 py-4 rounded-xl bg-wood-900 hover:bg-wood-800 text-amber-100 font-bold shadow-lg shadow-wood-900/15 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 text-base border border-wood-700">
-                                <i class="fa-solid fa-compass text-amber-400"></i> Explorar Acervo
-                            </button>
-                            <button @click="openAuthModal('register')" class="px-8 py-4 rounded-xl bg-white hover:bg-parchment-100 text-wood-900 font-bold border border-wood-300 shadow-sm transition-all flex items-center justify-center gap-2 text-base">
-                                <i class="fa-solid fa-user-plus text-amber-700"></i> Criar Conta Grátis
-                            </button>
-                        </div>
-                        
-                        <!-- Trust badges -->
-                        <div class="pt-6 grid grid-cols-3 gap-4 border-t border-wood-200 text-center sm:text-left">
-                            <div>
-                                <span class="block text-2xl font-serif font-bold text-amber-800">100%</span>
-                                <span class="text-xs text-wood-600 font-medium">Acervo Protegido</span>
-                            </div>
-                            <div>
-                                <span class="block text-2xl font-serif font-bold text-amber-800">24/7</span>
-                                <span class="text-xs text-wood-600 font-medium">Suporte ao Leitor</span>
-                            </div>
-                            <div>
-                                <span class="block text-2xl font-serif font-bold text-amber-800">Envios</span>
-                                <span class="text-xs text-wood-600 font-medium">Para Todo o Brasil</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Dynamic Visual Showcase Card -->
-                    <div class="lg:col-span-5 flex justify-center">
-                        <div class="relative w-full max-w-md">
-                            <!-- Background Subtle Glow -->
-                            <div class="absolute -inset-1 bg-gradient-to-r from-amber-600 to-wood-800 rounded-3xl blur-xl opacity-20 animate-pulse"></div>
-                            
-                            <div class="relative rounded-3xl glass-panel p-6 shadow-xl border border-wood-200 space-y-6 bg-white/90">
-                                <div class="flex items-center justify-between border-b border-wood-100 pb-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-800">
-                                            <i class="fa-solid fa-landmark text-lg"></i>
-                                        </div>
-                                        <div>
-                                            <h3 class="text-sm font-bold text-wood-900">Status da Biblioteca</h3>
-                                            <p class="text-xs text-wood-600">Pronta para novos cadastros</p>
-                                        </div>
-                                    </div>
-                                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                                        ● Ativa
-                                    </span>
-                                </div>
-
-                                <div class="space-y-4">
-                                    <div class="bg-parchment-50 p-4 rounded-xl border border-wood-200 flex items-center justify-between">
-                                        <div class="flex items-center gap-3">
-                                            <i class="fa-solid fa-book text-amber-700 text-xl"></i>
-                                            <div>
-                                                <p class="text-xs text-wood-600">Livros no Acervo</p>
-                                                <p class="text-lg font-bold text-wood-900" x-text="books.length + ' Livros'"></p>
-                                            </div>
-                                        </div>
-                                        <button @click="currentTab = 'admin'" class="px-3 py-1.5 rounded-lg bg-wood-900 hover:bg-wood-800 text-amber-100 text-xs font-bold transition">
-                                            + Adicionar
-                                        </button>
-                                    </div>
-
-                                    <div class="bg-parchment-50 p-4 rounded-xl border border-wood-200 flex items-center justify-between">
-                                        <div class="flex items-center gap-3">
-                                            <i class="fa-solid fa-receipt text-amber-700 text-xl"></i>
-                                            <div>
-                                                <p class="text-xs text-wood-600">Total de Vendas</p>
-                                                <p class="text-lg font-bold text-wood-900" x-text="orders.length + ' Pedidos'"></p>
-                                            </div>
-                                        </div>
-                                        <span class="text-xs font-bold text-amber-800" x-text="formatCurrency(getTotalSales())"></span>
-                                    </div>
-                                </div>
-
-                                <div class="bg-amber-50 rounded-2xl p-4 border border-amber-200 text-center space-y-2">
-                                    <p class="text-xs text-amber-900 font-medium">
-                                        <i class="fa-solid fa-circle-info mr-1 text-amber-700"></i> Seu acervo está vazio no momento. Utilize o painel para cadastrar obras.
-                                    </p>
-                                    <button @click="currentTab = 'admin'" class="text-xs font-bold text-amber-800 hover:text-wood-900 underline">
-                                        Ir para Cadastro de Livros →
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Features Grid Section -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center space-y-2 mb-12">
-                    <h2 class="text-2xl sm:text-3xl font-serif font-bold text-wood-900">Por que utilizar a Lumina?</h2>
-                    <p class="text-wood-600 text-sm max-w-xl mx-auto">Desenvolvida com inspiração em bibliotecas clássicas para proporcionar uma navegação agradável e eficiente.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="glass-card p-6 rounded-2xl space-y-3 border border-wood-200">
-                        <div class="w-12 h-12 rounded-xl bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-800 text-xl">
-                            <i class="fa-solid fa-shield-halved"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-wood-900">Segurança de Dados</h3>
-                        <p class="text-sm text-wood-600 leading-relaxed">Área de cadastro e login de leitores e administradores com percursos simplificados.</p>
-                    </div>
-
-                    <div class="glass-card p-6 rounded-2xl space-y-3 border border-wood-200">
-                        <div class="w-12 h-12 rounded-xl bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-800 text-xl">
-                            <i class="fa-solid fa-sliders"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-wood-900">Gestão Completa</h3>
-                        <p class="text-sm text-wood-600 leading-relaxed">Painel para adicionar novos livros, gerenciar preços, estoques e acompanhar os totais vendidos.</p>
-                    </div>
-
-                    <div class="glass-card p-6 rounded-2xl space-y-3 border border-wood-200">
-                        <div class="w-12 h-12 rounded-xl bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-800 text-xl">
-                            <i class="fa-solid fa-mobile-screen"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-wood-900">Compatível com Dispositivos</h3>
-                        <p class="text-sm text-wood-600 leading-relaxed">Design responsivo otimizado para celulares, tablets, notebooks e computadores.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 2: BOOK CATALOG -->
-        <section x-show="currentTab === 'catalog'" x-transition class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-            <!-- Catalog Header & Search Controls -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 glass-panel p-6 rounded-2xl border border-wood-200">
-                <div>
-                    <h2 class="text-2xl font-serif font-bold text-wood-900 flex items-center gap-2">
-                        <i class="fa-solid fa-book-open text-amber-700"></i> Acervo da Biblioteca
-                    </h2>
-                    <p class="text-xs text-wood-600 mt-1">Navegue pelas obras disponíveis ou adicione novos livros na área de administração.</p>
-                </div>
-
-                <!-- Filters & Search -->
-                <div class="flex flex-col sm:flex-row items-center gap-3">
-                    <div class="relative w-full sm:w-64">
-                        <input type="text" x-model="searchQuery" placeholder="Buscar por título ou autor..." class="w-full bg-white border border-wood-300 rounded-xl px-4 py-2 pl-10 text-sm text-wood-900 placeholder-wood-400 focus:outline-none focus:border-amber-600">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-wood-400 text-xs"></i>
-                    </div>
-
-                    <select x-model="selectedCategory" class="w-full sm:w-auto bg-white border border-wood-300 rounded-xl px-3 py-2 text-sm text-wood-900 focus:outline-none focus:border-amber-600">
-                        <option value="Todos">Todas as Categorias</option>
-                        <option value="Ficção">Ficção</option>
-                        <option value="Não-Ficção">Não-Ficção</option>
-                        <option value="Tecnologia">Tecnologia</option>
-                        <option value="Desenvolvimento Pessoal">Desenvolvimento Pessoal</option>
-                        <option value="Negócios">Negócios</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Catalog Empty State (No books created yet) -->
-            <template x-if="filteredBooks.length === 0">
-                <div class="text-center py-16 glass-panel rounded-3xl border border-wood-200 p-8 max-w-2xl mx-auto space-y-6 bg-white/80">
-                    <div class="w-20 h-20 rounded-full bg-amber-100 border border-amber-300 mx-auto flex items-center justify-center text-amber-800 text-3xl">
-                        <i class="fa-solid fa-book-medical"></i>
-                    </div>
-                    <div class="space-y-2">
-                        <h3 class="text-xl font-serif font-bold text-wood-900">Nenhum livro no acervo</h3>
-                        <p class="text-sm text-wood-600">
-                            Ainda não existem livros cadastrados no catálogo. Utilize o painel administrativo para cadastrar as obras da sua biblioteca digital.
-                        </p>
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-                        <button @click="currentTab = 'admin'" class="px-6 py-3 rounded-xl bg-wood-900 hover:bg-wood-800 text-amber-100 font-bold text-sm shadow-md transition flex items-center justify-center gap-2 border border-wood-700">
-                            <i class="fa-solid fa-plus-circle text-amber-400"></i> Ir para Cadastro de Livros
-                        </button>
-                        <button @click="addSampleBook()" class="px-6 py-3 rounded-xl bg-white hover:bg-parchment-100 text-wood-800 font-bold text-sm border border-wood-300 transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-wand-magic-sparkles text-amber-700"></i> Adicionar Exemplo Rápido
-                        </button>
-                    </div>
-                </div>
-            </template>
-
-            <!-- Books Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <template x-for="book in filteredBooks" :key="book.id">
-                    <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between hover:scale-[1.02] transition-all duration-300 group">
-                        <!-- Book Cover Graphic -->
-                        <div class="p-6 bg-gradient-to-br from-parchment-100 to-wood-100 border-b border-wood-200 relative overflow-hidden flex items-center justify-center min-h-[220px]">
-                            <div class="w-32 h-44 rounded-md shadow-xl p-4 flex flex-col justify-between text-white transition-transform group-hover:-translate-y-1 relative" :style="'background: ' + book.coverBg">
-                                <div class="border-b border-white/20 pb-2">
-                                    <span class="text-[9px] uppercase tracking-widest block font-bold opacity-80" x-text="book.category"></span>
-                                    <p class="text-xs font-serif font-bold line-clamp-2 mt-1" x-text="book.title"></p>
-                                </div>
-                                <div>
-                                    <p class="text-[10px] italic opacity-90" x-text="book.author"></p>
-                                    <i class="fa-solid fa-book-bookmark text-base mt-2 block opacity-60"></i>
-                                </div>
-                            </div>
-
-                            <span class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-[10px] font-bold bg-white text-wood-900 border border-wood-200 shadow-sm" x-text="book.category"></span>
-                        </div>
-
-                        <!-- Book Details & Action -->
-                        <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
-                            <div>
-                                <h3 class="text-lg font-serif font-bold text-wood-900 group-hover:text-amber-800 transition line-clamp-1" x-text="book.title"></h3>
-                                <p class="text-xs text-wood-600 font-medium mt-0.5" x-text="'Por ' + book.author"></p>
-                                <p class="text-xs text-wood-700 mt-2 line-clamp-2 leading-relaxed" x-text="book.synopsis"></p>
-                            </div>
-
-                            <div class="pt-3 border-t border-wood-100 flex items-center justify-between">
-                                <div>
-                                    <span class="text-xs text-wood-500 block">Preço</span>
-                                    <span class="text-xl font-bold text-wood-900" x-text="formatCurrency(book.price)"></span>
-                                </div>
-
-                                <button @click="addToCart(book)" :disabled="book.stock <= 0" class="px-4 py-2 rounded-xl bg-wood-900 hover:bg-wood-800 text-amber-100 font-bold text-xs transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 border border-wood-700">
-                                    <i class="fa-solid fa-cart-plus text-amber-400"></i>
-                                    <span x-text="book.stock > 0 ? 'Comprar' : 'Esgotado'"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-            </div>
-        </section>
-
-        <!-- TAB 3: REVIEWS & FAQ -->
-        <section x-show="currentTab === 'community'" x-transition class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
-            <!-- Section Header -->
-            <div class="text-center space-y-2">
-                <h2 class="text-3xl font-serif font-bold text-wood-900">Avaliações & Atendimento</h2>
-                <p class="text-wood-600 text-sm max-w-xl mx-auto">Confira os comentários dos nossos leitores e tire dúvidas sobre os serviços da biblioteca.</p>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <!-- REVIEWS COLUMN -->
-                <div class="lg:col-span-7 space-y-6">
-                    <div class="flex items-center justify-between glass-panel p-4 rounded-2xl border border-wood-200">
-                        <h3 class="text-lg font-serif font-bold text-wood-900 flex items-center gap-2">
-                            <i class="fa-solid fa-star text-amber-600"></i> Avaliações da Plataforma
-                        </h3>
-                        <button @click="showReviewModal = true" class="px-3.5 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold text-xs transition border border-amber-300">
-                            + Deixar Avaliação
-                        </button>
-                    </div>
-
-                    <div class="space-y-4">
-                        <template x-for="review in reviews" :key="review.id">
-                            <div class="glass-card p-5 rounded-2xl space-y-3 border border-wood-200">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-9 h-9 rounded-full bg-wood-900 text-amber-100 font-bold flex items-center justify-center text-sm" x-text="review.userName.charAt(0)"></div>
-                                        <div>
-                                            <h4 class="text-sm font-bold text-wood-900" x-text="review.userName"></h4>
-                                            <span class="text-[10px] text-wood-500" x-text="review.date"></span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Stars -->
-                                    <div class="flex text-amber-500 text-xs gap-1">
-                                        <template x-for="i in 5">
-                                            <i class="fa-solid fa-star" :class="i <= review.rating ? 'text-amber-500' : 'text-wood-200'"></i>
-                                        </template>
-                                    </div>
-                                </div>
-                                <p class="text-xs text-wood-700 leading-relaxed" x-text="review.comment"></p>
-                            </div>
-                        </template>
-                    </div>
-                </div>
-
-                <!-- FAQ & QUESTIONS COLUMN -->
-                <div class="lg:col-span-5 space-y-6">
-                    <div class="glass-panel p-4 rounded-2xl border border-wood-200 flex items-center justify-between">
-                        <h3 class="text-lg font-serif font-bold text-wood-900 flex items-center gap-2">
-                            <i class="fa-solid fa-circle-question text-amber-700"></i> Dúvidas Frequentes
-                        </h3>
-                        <button @click="showQuestionModal = true" class="px-3.5 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold text-xs transition border border-amber-300">
-                            Enviar Pergunta
-                        </button>
-                    </div>
-
-                    <div class="space-y-3">
-                        <template x-for="(faq, index) in faqs" :key="index">
-                            <div class="glass-card rounded-2xl border border-wood-200 overflow-hidden">
-                                <button @click="faq.open = !faq.open" class="w-full text-left p-4 flex items-center justify-between text-sm font-semibold text-wood-900 hover:text-amber-800 transition">
-                                    <span x-text="faq.question"></span>
-                                    <i class="fa-solid fa-chevron-down text-xs text-amber-700 transition-transform" :class="faq.open ? 'rotate-180' : ''"></i>
-                                </button>
-                                <div x-show="faq.open" x-transition class="p-4 pt-0 text-xs text-wood-700 border-t border-wood-100 bg-parchment-50/50">
-                                    <p x-text="faq.answer"></p>
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 4: ADMIN PANEL -->
-        <section x-show="currentTab === 'admin'" x-transition class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-            <!-- Admin Header -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 glass-panel p-6 rounded-2xl border border-wood-200">
-                <div>
-                    <span class="text-xs uppercase font-bold tracking-widest text-amber-700">Gestão do Acervo & Vendas</span>
-                    <h2 class="text-2xl font-serif font-bold text-wood-900">Painel de Controle Lumina</h2>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button @click="adminTab = 'books'" :class="adminTab === 'books' ? 'bg-wood-900 text-amber-100 font-bold' : 'bg-white text-wood-700 hover:bg-parchment-100'" class="px-4 py-2 rounded-xl text-xs transition border border-wood-300">
-                        <i class="fa-solid fa-book-medical mr-1 text-amber-500"></i> Cadastrar Livros (<span x-text="books.length"></span>)
-                    </button>
-                    <button @click="adminTab = 'orders'" :class="adminTab === 'orders' ? 'bg-wood-900 text-amber-100 font-bold' : 'bg-white text-wood-700 hover:bg-parchment-100'" class="px-4 py-2 rounded-xl text-xs transition border border-wood-300">
-                        <i class="fa-solid fa-receipt mr-1 text-amber-500"></i> Pedidos (<span x-text="orders.length"></span>)
-                    </button>
-                </div>
-            </div>
-
-            <!-- ADMIN SUB-TAB 1: MANAGING & ADDING BOOKS -->
-            <div x-show="adminTab === 'books'" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <!-- Add Book Form -->
-                <div class="lg:col-span-5 glass-panel p-6 rounded-2xl border border-wood-200 space-y-4 bg-white/90">
-                    <h3 class="text-lg font-serif font-bold text-wood-900 flex items-center gap-2 border-b border-wood-200 pb-3">
-                        <i class="fa-solid fa-plus-circle text-amber-700"></i> Cadastrar Novo Título
-                    </h3>
-
-                    <form @submit.prevent="saveBook()" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold text-wood-800 mb-1">Título do Livro</label>
-                            <input type="text" x-model="newBook.title" required placeholder="Ex: Dom Casmurro" class="w-full bg-parchment-50 border border-wood-300 rounded-xl px-3.5 py-2 text-xs text-wood-900 placeholder-wood-400 focus:outline-none focus:border-amber-600">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-wood-800 mb-1">Autor / Autora</label>
-                            <input type="text" x-model="newBook.author" required placeholder="Ex: Machado de Assis" class="w-full bg-parchment-50 border border-wood-300 rounded-xl px-3.5 py-2 text-xs text-wood-900 placeholder-wood-400 focus:outline-none focus:border-amber-600">
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-bold text-wood-800 mb-1">Categoria</label>
-                                <select x-model="newBook.category" class="w-full bg-parchment-50 border border-wood-300 rounded-xl px-3 py-2 text-xs text-wood-900 focus:outline-none focus:border-amber-600">
-                                    <option value="Ficção">Ficção</option>
-                                    <option value="Não-Ficção">Não-Ficção</option>
-                                    <option value="Tecnologia">Tecnologia</option>
-                                    <option value="Desenvolvimento Pessoal">Desenvolvimento Pessoal</option>
-                                    <option value="Negócios">Negócios</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-wood-800 mb-1">Preço (R$)</label>
-                                <input type="number" step="0.01" min="1" x-model.number="newBook.price" required placeholder="39.90" class="w-full bg-parchment-50 border border-wood-300 rounded-xl px-3.5 py-2 text-xs text-wood-900 focus:outline-none focus:border-amber-600">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-bold text-wood-800 mb-1">Quantidade em Estoque</label>
-                                <input type="number" min="1" x-model.number="newBook.stock" required placeholder="10" class="w-full bg-parchment-50 border border-wood-300 rounded-xl px-3.5 py-2 text-xs text-wood-900 focus:outline-none focus:border-amber-600">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-wood-800 mb-1">Estilo de Capa</label>
-                                <select x-model="newBook.coverBg" class="w-full bg-parchment-50 border border-wood-300 rounded-xl px-3 py-2 text-xs text-wood-900 focus:outline-none focus:border-amber-600">
-                                    <option value="linear-gradient(135deg, #3d2216, #170d08)">Mogno Clássico</option>
-                                    <option value="linear-gradient(135deg, #78350f, #28160e)">Couro Dourado</option>
-                                    <option value="linear-gradient(135deg, #1e3a8a, #0f172a)">Azul Real</option>
-                                    <option value="linear-gradient(135deg, #065f46, #022c22)">Verde Esmeralda</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-wood-800 mb-1">Sinopse / Resumo</label>
-                            <textarea x-model="newBook.synopsis" rows="3" required placeholder="Escreva um resumo do livro..." class="w-full bg-parchment-50 border border-wood-300 rounded-xl px-3.5 py-2 text-xs text-wood-900 placeholder-wood-400 focus:outline-none focus:border-amber-600"></textarea>
-                        </div>
-
-                        <button type="submit" class="w-full py-3.5 rounded-xl bg-wood-900 hover:bg-wood-800 text-amber-100 font-bold text-xs shadow-md transition flex items-center justify-center gap-2 border border-wood-700">
-                            <i class="fa-solid fa-plus text-amber-400"></i> Confirmar Cadastro de Livro
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Existing Books Table -->
-                <div class="lg:col-span-7 glass-panel p-6 rounded-2xl border border-wood-200 space-y-4 bg-white/90">
-                    <h3 class="text-lg font-serif font-bold text-wood-900 flex items-center justify-between border-b border-wood-200 pb-3">
-                        <span><i class="fa-solid fa-list-check text-amber-700"></i> Livros Registrados</span>
-                        <span class="text-xs font-normal text-wood-600" x-text="books.length + ' item(ns)'"></span>
-                    </h3>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-wood-800">
-                            <thead class="bg-wood-900 text-amber-100 uppercase font-semibold border-b border-wood-300">
-                                <tr>
-                                    <th class="p-3">Título</th>
-                                    <th class="p-3">Categoria</th>
-                                    <th class="p-3">Preço</th>
-                                    <th class="p-3">Estoque</th>
-                                    <th class="p-3 text-right">Ação</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-wood-200">
-                                <template x-for="b in books" :key="b.id">
-                                    <tr class="hover:bg-parchment-100/60 transition">
-                                        <td class="p-3 font-semibold text-wood-900">
-                                            <p x-text="b.title"></p>
-                                            <p class="text-[10px] text-wood-600 font-normal" x-text="b.author"></p>
-                                        </td>
-                                        <td class="p-3" x-text="b.category"></td>
-                                        <td class="p-3 text-amber-800 font-bold" x-text="formatCurrency(b.price)"></td>
-                                        <td class="p-3">
-                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold" :class="b.stock > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'" x-text="b.stock + ' un'"></span>
-                                        </td>
-                                        <td class="p-3 text-right">
-                                            <button @click="deleteBook(b.id)" class="p-1.5 text-rose-700 hover:text-rose-900 hover:bg-rose-100 rounded transition">
-                                                <i class="fa-solid fa-trash-can"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </template>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ADMIN SUB-TAB 2: MANAGING SALES / ORDERS -->
-            <div x-show="adminTab === 'orders'" class="space-y-6">
-                <!-- Sales Summary Cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="glass-card p-5 rounded-2xl border border-wood-200 space-y-1">
-                        <span class="text-xs text-wood-600 font-semibold">Total de Vendas</span>
-                        <p class="text-2xl font-serif font-bold text-wood-900" x-text="orders.length"></p>
-                    </div>
-                    <div class="glass-card p-5 rounded-2xl border border-wood-200 space-y-1">
-                        <span class="text-xs text-wood-600 font-semibold">Faturamento Bruto</span>
-                        <p class="text-2xl font-serif font-bold text-amber-800" x-text="formatCurrency(getTotalSales())"></p>
-                    </div>
-                    <div class="glass-card p-5 rounded-2xl border border-wood-200 space-y-1">
-                        <span class="text-xs text-wood-600 font-semibold">Média por Pedido</span>
-                        <p class="text-2xl font-serif font-bold text-wood-900" x-text="orders.length > 0 ? formatCurrency(getTotalSales() / orders.length) : 'R$ 0,00'"></p>
-                    </div>
-                </div>
-
-                <!-- Orders Table -->
-                <div class="glass-panel p-6 rounded-2xl border border-wood-200 space-y-4 bg-white/90">
-                    <h3 class="text-lg font-serif font-bold text-wood-900 flex items-center justify-between border-b border-wood-200 pb-3">
-                        <span><i class="fa-solid fa-receipt text-amber-700"></i> Histórico de Pedidos</span>
-                    </h3>
-
-                    <template x-if="orders.length === 0">
-                        <p class="text-center py-8 text-xs text-wood-600">Nenhum pedido realizado até o momento. Faça uma simulação de compra no catálogo!</p>
-                    </template>
-
-                    <template x-if="orders.length > 0">
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs text-wood-800">
-                                <thead class="bg-wood-900 text-amber-100 uppercase font-semibold border-b border-wood-300">
-                                    <tr>
-                                        <th class="p-3">ID Pedido</th>
-                                        <th class="p-3">Cliente</th>
-                                        <th class="p-3">Data</th>
-                                        <th class="p-3">Itens</th>
-                                        <th class="p-3">Total</th>
-                                        <th class="p-3">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-wood-200">
-                                    <template x-for="ord in orders" :key="ord.id">
-                                        <tr class="hover:bg-parchment-100/60 transition">
-                                            <td class="p-3 font-mono font-bold text-amber-800" x-text="'#' + ord.id"></td>
-                                            <td class="p-3 text-wood-900 font-medium" x-text="ord.customerName"></td>
-                                            <td class="p-3 text-wood-600" x-text="ord.date"></td>
-                                            <td class="p-3">
-                                                <span x-text="ord.items.length + ' item(ns)'"></span>
-                                            </td>
-                                            <td class="p-3 font-bold text-wood-900" x-text="formatCurrency(ord.total)"></td>
-                                            <td class="p-3">
-                                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                                                    Concluído
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                </tbody>
-                            </table>
-                        </div>
-                    </template>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- SHOPPING CART DRAWER / SLIDE-OVER -->
-    <div x-show="cartOpen" class="fixed inset-0 z-50 overflow-hidden" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
-        <!-- Backdrop -->
-        <div @click="cartOpen = false" class="absolute inset-0 bg-wood-950/60 backdrop-blur-xs"></div>
-
-        <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
-            <div class="w-screen max-w-md bg-parchment-50 border-l border-wood-300 shadow-2xl flex flex-col justify-between">
-                <!-- Cart Header -->
-                <div class="p-6 border-b border-wood-200 flex items-center justify-between bg-white">
-                    <div class="flex items-center gap-2 text-wood-900 font-serif font-bold text-lg">
-                        <i class="fa-solid fa-basket-shopping text-amber-700"></i>
-                        <span>Seu Carrinho</span>
-                        <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold" x-text="cartTotalCount"></span>
-                    </div>
-                    <button @click="cartOpen = false" class="text-wood-500 hover:text-wood-900 text-xl">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-
-                <!-- Cart Items List -->
-                <div class="p-6 flex-grow overflow-y-auto space-y-4">
-                    <template x-if="cart.length === 0">
-                        <div class="text-center py-16 text-wood-600 space-y-3">
-                            <i class="fa-solid fa-cart-flatbed text-4xl text-wood-300"></i>
-                            <p class="text-sm">Seu carrinho de compras está vazio.</p>
-                            <button @click="cartOpen = false; currentTab = 'catalog'" class="text-xs font-bold text-amber-800 hover:underline">
-                                Explorar o Acervo
-                            </button>
-                        </div>
-                    </template>
-
-                    <template x-for="item in cart" :key="item.book.id">
-                        <div class="glass-card p-4 rounded-xl border border-wood-200 flex items-center justify-between gap-3 bg-white">
-                            <div class="flex-grow">
-                                <h4 class="text-sm font-bold text-wood-900 line-clamp-1" x-text="item.book.title"></h4>
-                                <span class="text-xs text-amber-800 font-bold block" x-text="formatCurrency(item.book.price)"></span>
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                                <button @click="updateCartQuantity(item.book.id, -1)" class="w-7 h-7 rounded-lg bg-parchment-100 text-wood-900 font-bold flex items-center justify-center border border-wood-300 hover:bg-parchment-200">-</button>
-                                <span class="text-xs font-bold text-wood-900 w-4 text-center" x-text="item.quantity"></span>
-                                <button @click="updateCartQuantity(item.book.id, 1)" class="w-7 h-7 rounded-lg bg-parchment-100 text-wood-900 font-bold flex items-center justify-center border border-wood-300 hover:bg-parchment-200">+</button>
-                            </div>
-
-                            <button @click="removeFromCart(item.book.id)" class="text-rose-700 hover:text-rose-900 text-sm p-1">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    </template>
-                </div>
-
-                <!-- Cart Footer / Checkout -->
-                <div class="p-6 border-t border-wood-200 bg-white space-y-4">
-                    <div class="space-y-2 text-xs text-wood-700">
-                        <div class="flex justify-between">
-                            <span>Subtotal</span>
-                            <span class="font-bold text-wood-900" x-text="formatCurrency(cartSubtotal)"></span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Frete</span>
-                            <span class="text-emerald-700 font-bold">GRÁTIS</span>
-                        </div>
-                        <div class="flex justify-between text-base font-serif font-bold text-wood-900 pt-2 border-t border-wood-200">
-                            <span>Total</span>
-                            <span x-text="formatCurrency(cartSubtotal)"></span>
-                        </div>
-                    </div>
-
-                    <button @click="checkout()" :disabled="cart.length === 0" class="w-full py-3.5 rounded-xl bg-wood-900 hover:bg-wood-800 text-amber-100 font-bold text-sm shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 border border-wood-700">
-                        <i class="fa-solid fa-lock text-amber-400"></i> Finalizar Compra Simulado
-                    </button>
-                </div>
-            </div>
-        </div>
+<!-- HEADER -->
+<header class="sticky top-0 z-40 bg-parchment-50/90 backdrop-blur border-b border-wood-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+    <div class="flex items-center gap-3 cursor-pointer" @click="tab='home'">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-wood-900 via-wood-800 to-amber-700 flex items-center justify-center text-amber-100"><i class="fa-solid fa-book-bookmark text-xl"></i></div>
+      <div><span class="text-2xl font-serif font-bold">Lumina</span><span class="text-[10px] font-bold text-amber-700 block -mt-1 tracking-widest uppercase">Biblioteca & Livraria</span></div>
     </div>
-
-    <!-- AUTHENTICATION MODAL (LOGIN / CADASTRO) -->
-    <div x-show="showAuthModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-wood-950/60 backdrop-blur-xs" x-transition>
-        <div class="glass-panel max-w-md w-full rounded-3xl p-6 sm:p-8 border border-wood-300 relative space-y-6 bg-white">
-            <button @click="showAuthModal = false" class="absolute top-5 right-5 text-wood-500 hover:text-wood-900 text-xl">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-            <!-- Mode Selector -->
-            <div class="flex bg-parchment-100 rounded-xl p-1 border border-wood-200">
-                <button @click="authMode = 'login'" :class="authMode === 'login' ? 'bg-wood-900 text-amber-100 font-bold' : 'text-wood-700 hover:text-wood-900'" class="flex-1 py-2 rounded-lg text-xs transition">Entrar</button>
-                <button @click="authMode = 'register'" :class="authMode === 'register' ? 'bg-wood-900 text-amber-100 font-bold' : 'text-wood-700 hover:text-wood-900'" class="flex-1 py-2 rounded-lg text-xs transition">Cadastrar</button>
-            </div>
-
-            <form @submit.prevent="handleAuth()" class="space-y-4">
-                <template x-if="authMode === 'register'">
-                    <div>
-                        <label class="block text-xs font-bold text-wood-800 mb-1">Nome Completo</label>
-                        <input type="text" x-model="authForm.name" required placeholder="Seu nome" class="w-full bg-parchment-50 border border-wood-300 rounded-xl px-4 py-2.5 text-xs text-wood-900 placeholder-wood-400 focus:outline-none focus:border-amber-600">
-                    </div>
-                </template>
-
-                <div>
-                    <label class="block text-xs font-bold text-wood-800 mb-1">E-mail</label>
-                    <input type="email" x-model="authForm.email" required placeholder="seu@email.com" class="w-full bg-parchment-50 border border-wood-300 rounded-xl px-4 py-2.5 text-xs text-wood-900 placeholder-wood-400 focus:outline-none focus:border-amber-600">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-wood-800 mb-1">Senha</label>
-                    <input type="password" x-model="authForm.password" required placeholder="••••••••" class="w-full bg-parchment-50 border border-wood-300 rounded-xl px-4 py-2.5 text-xs text-wood-900 placeholder-wood-400 focus:outline-none focus:border-amber-600">
-                </div>
-
-                <button type="submit" class="w-full py-3.5 rounded-xl bg-wood-900 hover:bg-wood-800 text-amber-100 font-bold text-xs shadow-md transition border border-wood-700">
-                    <span x-text="authMode === 'login' ? 'Acessar Conta' : 'Criar Minha Conta'"></span>
-                </button>
-            </form>
-        </div>
+    <nav class="hidden md:flex gap-1">
+      <template x-for="t in tabs" :key="t.id">
+        <button @click="tab=t.id" :class="tab===t.id?'bg-wood-100 text-amber-800 font-bold border-wood-300':'text-wood-700 hover:bg-parchment-100 border-transparent'" class="px-4 py-2 rounded-lg text-sm border transition"><i class="fa-solid mr-1.5 text-xs text-amber-700" :class="t.icon"></i><span x-text="t.label"></span></button>
+      </template>
+    </nav>
+    <div class="flex items-center gap-3">
+      <button @click="cartOpen=true" class="relative p-2.5 rounded-xl bg-white border border-wood-200 shadow-sm"><i class="fa-solid fa-basket-shopping text-lg"></i>
+        <span x-show="cart.length" x-text="cart.length" class="absolute -top-1.5 -right-1.5 bg-amber-700 text-white font-bold text-xs w-5 h-5 rounded-full flex items-center justify-center"></span></button>
+      <template x-if="!user"><button @click="openAuth('login')" class="btn"><i class="fa-regular fa-user"></i><span class="hidden sm:inline">Entrar / Cadastrar</span></button></template>
+      <template x-if="user"><div class="relative" x-data="{o:false}">
+        <button @click="o=!o" class="flex items-center gap-2 bg-white border border-wood-200 px-3 py-1.5 rounded-xl text-sm shadow-sm">
+          <span class="w-7 h-7 rounded-full bg-wood-900 text-amber-100 font-bold flex items-center justify-center text-xs" x-text="user.name.charAt(0)"></span>
+          <span class="hidden sm:inline max-w-[100px] truncate" x-text="user.name"></span><i class="fa-solid fa-chevron-down text-xs"></i></button>
+        <div x-show="o" x-cloak @click.outside="o=false" class="absolute right-0 mt-2 w-52 card py-2 z-50">
+          <p class="px-4 py-2 text-xs font-semibold border-b border-wood-100 truncate" x-text="user.email"></p>
+          <button @click="tab='library';o=false" class="w-full text-left px-4 py-2 text-sm hover:bg-parchment-100"><i class="fa-solid fa-book-open text-xs mr-2"></i>Minha biblioteca</button>
+          <button @click="logout();o=false" class="w-full text-left px-4 py-2 text-sm text-rose-600 hover:bg-rose-50"><i class="fa-solid fa-right-from-bracket text-xs mr-2"></i>Sair</button>
+        </div></div></template>
+      <button @click="menu=!menu" class="md:hidden p-2"><i class="fa-solid text-xl" :class="menu?'fa-xmark':'fa-bars'"></i></button>
     </div>
+  </div>
+  <div x-show="menu" x-cloak class="md:hidden bg-white border-b border-wood-200 px-4 py-2">
+    <template x-for="t in tabs" :key="t.id"><button @click="tab=t.id;menu=false" class="w-full text-left px-4 py-2.5 rounded-lg hover:bg-parchment-100 font-medium"><i class="fa-solid text-amber-700 mr-3" :class="t.icon"></i><span x-text="t.label"></span></button></template>
+  </div>
+</header>
 
-    <!-- REVIEW MODAL -->
-    <div x-show="showReviewModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-wood-950/60 backdrop-blur-xs" x-transition>
-        <div class="glass-panel max-w-md w-full rounded-3xl p-6 border border-wood-300 relative space-y-4 bg-white">
-            <button @click="showReviewModal = false" class="absolute top-4 right-4 text-wood-500 hover:text-wood-900">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <h3 class="text-lg font-serif font-bold text-wood-900">Deixar Avaliação</h3>
-            <form @submit.prevent="submitReview()" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-wood-800 mb-1">Sua Nota</label>
-                    <div class="flex gap-2 text-2xl text-amber-500">
-                        <template x-for="star in 5">
-                            <i class="fa-solid fa-star cursor-pointer" :class="star <= newReview.rating ? 'text-amber-500' : 'text-wood-200'" @click="newReview.rating = star"></i>
-                        </template>
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-wood-800 mb-1">Comentário</label>
-                    <textarea x-model="newReview.comment" required rows="3" class="w-full bg-parchment-50 border border-wood-300 rounded-xl p-3 text-xs text-wood-900 placeholder-wood-400" placeholder="Compartilhe a sua opinião sobre a biblioteca..."></textarea>
-                </div>
-                <button type="submit" class="w-full py-3 bg-wood-900 hover:bg-wood-800 text-amber-100 font-bold text-xs rounded-xl transition border border-wood-700">Enviar Avaliação</button>
-            </form>
-        </div>
+<main class="flex-grow">
+
+<!-- INÍCIO -->
+<section x-show="tab==='home'" class="max-w-7xl mx-auto px-4 sm:px-6 py-12 space-y-16">
+  <div class="grid lg:grid-cols-12 gap-12 items-center">
+    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+      <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100 border border-amber-500/40 text-amber-800 text-xs font-bold uppercase tracking-wider"><i class="fa-solid fa-feather-pointed"></i> Leitura digital imediata</span>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold leading-tight">Descubra Obras na Sua <span class="bg-gradient-to-r from-amber-700 to-wood-800 bg-clip-text text-transparent">Biblioteca Lumina</span></h1>
+      <p class="text-wood-700 text-lg max-w-2xl mx-auto lg:mx-0">Compre seus livros e leia na hora. Cada título comprado fica guardado na sua biblioteca pessoal, disponível sempre que você quiser.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+        <button @click="tab='catalog'" class="btn !py-4 !px-8 !text-base"><i class="fa-solid fa-compass text-amber-500"></i> Explorar Acervo</button>
+        <button x-show="!user" @click="openAuth('register')" class="btn2 !py-4 !px-8 !text-base"><i class="fa-solid fa-user-plus text-amber-700"></i> Criar Conta Grátis</button>
+        <button x-show="user" @click="tab='library'" class="btn2 !py-4 !px-8 !text-base"><i class="fa-solid fa-book-open text-amber-700"></i> Minha Biblioteca</button>
+      </div>
     </div>
+    <div class="lg:col-span-5"><div class="card p-6 space-y-4">
+      <h3 class="font-serif font-bold text-lg">Resumo da Lumina</h3>
+      <div class="bg-parchment-50 border border-wood-200 rounded-xl p-4 flex justify-between items-center"><span class="text-sm text-wood-600"><i class="fa-solid fa-book text-amber-700 mr-2"></i>Livros no acervo</span><b x-text="books.length"></b></div>
+      <div class="bg-parchment-50 border border-wood-200 rounded-xl p-4 flex justify-between items-center"><span class="text-sm text-wood-600"><i class="fa-solid fa-bookmark text-amber-700 mr-2"></i>Na sua biblioteca</span><b x-text="user?library.length:'—'"></b></div>
+      <p x-show="!loading && !books.length" class="text-xs text-wood-600 text-center">O acervo ainda está sendo montado. Volte em breve!</p>
+    </div></div>
+  </div>
+  <div class="grid md:grid-cols-3 gap-6">
+    <div class="card p-6 space-y-2"><i class="fa-solid fa-bolt text-2xl text-amber-700"></i><h3 class="font-bold text-lg">Leitura Imediata</h3><p class="text-sm text-wood-600">Comprou, liberou. O livro aparece na sua biblioteca assim que o pedido é concluído.</p></div>
+    <div class="card p-6 space-y-2"><i class="fa-solid fa-shield-halved text-2xl text-amber-700"></i><h3 class="font-bold text-lg">Conta Segura</h3><p class="text-sm text-wood-600">Seus livros ficam vinculados à sua conta, protegida por senha.</p></div>
+    <div class="card p-6 space-y-2"><i class="fa-solid fa-mobile-screen text-2xl text-amber-700"></i><h3 class="font-bold text-lg">Em Qualquer Tela</h3><p class="text-sm text-wood-600">Design responsivo para celular, tablet e computador.</p></div>
+  </div>
+</section>
 
-    <!-- QUESTION MODAL -->
-    <div x-show="showQuestionModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-wood-950/60 backdrop-blur-xs" x-transition>
-        <div class="glass-panel max-w-md w-full rounded-3xl p-6 border border-wood-300 relative space-y-4 bg-white">
-            <button @click="showQuestionModal = false" class="absolute top-4 right-4 text-wood-500 hover:text-wood-900">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <h3 class="text-lg font-serif font-bold text-wood-900">Enviar Dúvida</h3>
-            <form @submit.prevent="submitQuestion()" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-wood-800 mb-1">Sua Pergunta</label>
-                    <textarea x-model="newQuestionText" required rows="3" class="w-full bg-parchment-50 border border-wood-300 rounded-xl p-3 text-xs text-wood-900 placeholder-wood-400" placeholder="Escreva sua dúvida aqui..."></textarea>
-                </div>
-                <button type="submit" class="w-full py-3 bg-wood-900 hover:bg-wood-800 text-amber-100 font-bold text-xs rounded-xl transition border border-wood-700">Enviar Pergunta</button>
-            </form>
-        </div>
+<!-- ACERVO -->
+<section x-show="tab==='catalog'" x-cloak class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+  <div class="card p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div><h2 class="text-2xl font-serif font-bold"><i class="fa-solid fa-book-open text-amber-700 mr-2"></i>Acervo da Biblioteca</h2><p class="text-xs text-wood-600 mt-1">Escolha um título, compre e leia na hora.</p></div>
+    <div class="flex flex-col sm:flex-row gap-3">
+      <input x-model="q" placeholder="Buscar por título ou autor..." class="inp sm:w-64">
+      <select x-model="cat" class="inp sm:w-auto"><option value="Todos">Todas as Categorias</option><option>Ficção</option><option>Não-Ficção</option><option>Tecnologia</option><option>Desenvolvimento Pessoal</option><option>Negócios</option></select>
     </div>
-
-    <!-- NOTIFICATION TOAST -->
-    <div x-show="toast.show" x-transition class="fixed bottom-6 right-6 z-50 px-5 py-3 rounded-2xl bg-wood-900 text-amber-100 font-semibold text-xs shadow-2xl border border-wood-700 flex items-center gap-3">
-        <i class="fa-solid fa-circle-check text-amber-400 text-base"></i>
-        <span x-text="toast.message"></span>
-    </div>
-
-    <!-- FOOTER -->
-    <footer class="bg-wood-950 text-parchment-200 border-t border-wood-800 py-10 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-amber-700 flex items-center justify-center text-wood-950 font-bold">
-                    <i class="fa-solid fa-book-bookmark"></i>
-                </div>
-                <span class="text-sm font-serif font-bold text-amber-100">Lumina Livros</span>
-            </div>
-            <p class="text-xs text-wood-200/70">© 2026 Lumina Livros. Plataforma de Gestão e Venda de Livros.</p>
-            <div class="flex space-x-4 text-amber-500 text-sm">
-                <i class="fa-brands fa-instagram hover:text-amber-300 cursor-pointer"></i>
-                <i class="fa-brands fa-twitter hover:text-amber-300 cursor-pointer"></i>
-                <i class="fa-brands fa-facebook hover:text-amber-300 cursor-pointer"></i>
-            </div>
+  </div>
+  <p x-show="loading" class="text-center text-sm text-wood-600 py-10">Carregando acervo...</p>
+  <div x-show="!loading && !filtered.length" class="card p-10 text-center max-w-xl mx-auto space-y-2"><i class="fa-solid fa-book-medical text-3xl text-amber-700"></i><h3 class="font-serif font-bold text-xl">Nenhum livro encontrado</h3><p class="text-sm text-wood-600">Ainda não há livros com esses filtros. Tente outra busca.</p></div>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <template x-for="b in filtered" :key="b.id">
+      <div class="card overflow-hidden flex flex-col hover:border-amber-700 transition">
+        <div class="h-52 flex items-center justify-center bg-gradient-to-br from-parchment-100 to-wood-100 border-b border-wood-200 relative">
+          <template x-if="b.coverUrl"><img :src="b.coverUrl" :alt="b.title" class="h-44 rounded shadow-xl object-cover"></template>
+          <template x-if="!b.coverUrl"><div class="w-32 h-44 rounded-md shadow-xl p-4 flex flex-col justify-between text-white" :style="coverStyle(b)">
+            <div class="border-b border-white/20 pb-2"><span class="text-[9px] uppercase tracking-widest font-bold opacity-80" x-text="b.category"></span><p class="text-xs font-serif font-bold line-clamp-3 mt-1" x-text="b.title"></p></div>
+            <p class="text-[10px] italic opacity-90" x-text="b.author"></p></div></template>
+          <span x-show="owned(b)" class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">Na sua biblioteca</span>
         </div>
-    </footer>
+        <div class="p-5 flex-grow flex flex-col justify-between gap-4">
+          <div><h3 class="text-lg font-serif font-bold line-clamp-1" x-text="b.title"></h3><p class="text-xs text-wood-600 font-medium" x-text="'Por '+b.author"></p><p class="text-xs text-wood-700 mt-2 line-clamp-3" x-text="b.synopsis"></p></div>
+          <div class="pt-3 border-t border-wood-100 flex items-center justify-between">
+            <span class="text-xl font-bold" x-text="money(b.price)"></span>
+            <button x-show="owned(b)" @click="read(b.id)" class="btn"><i class="fa-solid fa-book-open text-amber-500"></i> Ler</button>
+            <button x-show="!owned(b)" @click="add(b)" :disabled="inCart(b)" class="btn"><i class="fa-solid fa-cart-plus text-amber-500"></i><span x-text="inCart(b)?'No carrinho':'Comprar'"></span></button>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+</section>
 
-    <!-- ALPINE JS LOGIC -->
-    <script>
-        function storeApp() {
-            return {
-                currentTab: 'home',
-                adminTab: 'books',
-                mobileMenuOpen: false,
-                cartOpen: false,
-                showAuthModal: false,
-                authMode: 'login',
-                showReviewModal: false,
-                showQuestionModal: false,
-                newQuestionText: '',
-                
-                searchQuery: '',
-                selectedCategory: 'Todos',
+<!-- MINHA BIBLIOTECA -->
+<section x-show="tab==='library'" x-cloak class="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+  <div class="card p-6"><h2 class="text-2xl font-serif font-bold"><i class="fa-solid fa-book-open text-amber-700 mr-2"></i>Minha Biblioteca</h2><p class="text-xs text-wood-600 mt-1">Todos os livros que você comprou, prontos para ler.</p></div>
+  <div x-show="!user" class="card p-10 text-center space-y-3"><p class="text-sm text-wood-600">Entre na sua conta para ver seus livros.</p><button @click="openAuth('login')" class="btn">Entrar</button></div>
+  <div x-show="user && !library.length" class="card p-10 text-center space-y-3"><i class="fa-solid fa-book-medical text-3xl text-amber-700"></i><p class="text-sm text-wood-600">Você ainda não comprou nenhum livro.</p><button @click="tab='catalog'" class="btn">Explorar Acervo</button></div>
+  <template x-for="b in library" :key="b.id">
+    <div class="card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="flex items-center gap-4 min-w-0">
+        <div class="w-12 h-16 rounded shrink-0 overflow-hidden" :style="b.coverUrl?'':coverStyle(b)"><img x-show="b.coverUrl" :src="b.coverUrl" class="w-full h-full object-cover" alt=""></div>
+        <div class="min-w-0"><h3 class="font-serif font-bold truncate" x-text="b.title"></h3><p class="text-xs text-wood-600" x-text="b.author+' · comprado em '+new Date(b.purchased_at).toLocaleDateString('pt-BR')"></p></div>
+      </div>
+      <button @click="read(b.id)" :disabled="!b.fileUrl" class="btn shrink-0"><i class="fa-solid fa-book-open text-amber-500"></i><span x-text="b.fileUrl?'Ler agora':'Arquivo em breve'"></span></button>
+    </div>
+  </template>
+</section>
 
-                // Authentication state
-                currentUser: null,
-                authForm: {
-                    name: '',
-                    email: '',
-                    password: ''
-                },
+<!-- AVALIAÇÕES & DÚVIDAS -->
+<section x-show="tab==='community'" x-cloak class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+  <div class="text-center space-y-2"><h2 class="text-3xl font-serif font-bold">Avaliações & Atendimento</h2><p class="text-wood-600 text-sm">Veja o que os leitores dizem e tire suas dúvidas.</p></div>
+  <div class="grid lg:grid-cols-12 gap-8">
+    <div class="lg:col-span-7 space-y-4">
+      <div class="card p-4 flex items-center justify-between"><h3 class="font-serif font-bold text-lg"><i class="fa-solid fa-star text-amber-600 mr-2"></i>Avaliações</h3><button @click="need(()=>reviewOpen=true)" class="btn2">+ Deixar Avaliação</button></div>
+      <p x-show="!reviews.length" class="text-center text-sm text-wood-600 py-6">Ainda não há avaliações. Seja o primeiro!</p>
+      <template x-for="r in reviews" :key="r.id"><div class="card p-5 space-y-2">
+        <div class="flex items-center justify-between"><div class="flex items-center gap-3"><span class="w-9 h-9 rounded-full bg-wood-900 text-amber-100 font-bold flex items-center justify-center text-sm" x-text="r.userName.charAt(0)"></span><div><h4 class="text-sm font-bold" x-text="r.userName"></h4><span class="text-[10px] text-wood-600" x-text="r.date"></span></div></div>
+        <div class="flex gap-1 text-xs"><template x-for="i in 5"><i class="fa-solid fa-star" :class="i<=r.rating?'text-amber-500':'text-wood-200'"></i></template></div></div>
+        <p class="text-xs text-wood-700" x-text="r.comment"></p></div></template>
+    </div>
+    <div class="lg:col-span-5 space-y-4">
+      <div class="card p-4 flex items-center justify-between"><h3 class="font-serif font-bold text-lg"><i class="fa-solid fa-circle-question text-amber-700 mr-2"></i>Dúvidas</h3><button @click="need(()=>questionOpen=true)" class="btn2">Enviar Pergunta</button></div>
+      <template x-for="(f,i) in faqs" :key="i"><div class="card overflow-hidden">
+        <button @click="openFaq=openFaq===i?null:i" class="w-full text-left p-4 flex items-center justify-between text-sm font-semibold"><span x-text="f.question"></span><i class="fa-solid fa-chevron-down text-xs text-amber-700 transition" :class="openFaq===i?'rotate-180':''"></i></button>
+        <p x-show="openFaq===i" class="p-4 pt-3 text-xs text-wood-700 border-t border-wood-100 bg-parchment-50" x-text="f.answer||'Aguardando resposta da nossa equipe.'"></p></div></template>
+    </div>
+  </div>
+</section>
+</main>
 
-                // Books data array (Starts empty by request, with dynamic addition capability)
-                books: [],
+<!-- CARRINHO -->
+<div x-show="cartOpen" x-cloak class="fixed inset-0 z-50">
+  <div @click="cartOpen=false" class="absolute inset-0 bg-wood-950/60"></div>
+  <aside class="absolute inset-y-0 right-0 w-full max-w-md bg-parchment-50 border-l border-wood-300 shadow-2xl flex flex-col">
+    <div class="p-6 border-b border-wood-200 bg-white flex items-center justify-between"><h3 class="font-serif font-bold text-lg"><i class="fa-solid fa-basket-shopping text-amber-700 mr-2"></i>Seu Carrinho</h3><button @click="cartOpen=false" class="text-xl text-wood-500"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="p-6 flex-grow overflow-y-auto space-y-3">
+      <div x-show="!cart.length" class="text-center py-16 text-sm text-wood-600 space-y-3"><p>Seu carrinho está vazio.</p><button @click="cartOpen=false;tab='catalog'" class="text-xs font-bold text-amber-800 underline">Explorar o Acervo</button></div>
+      <template x-for="b in cart" :key="b.id"><div class="card p-4 flex items-center justify-between gap-3">
+        <div class="min-w-0"><h4 class="text-sm font-bold truncate" x-text="b.title"></h4><span class="text-xs text-amber-800 font-bold" x-text="money(b.price)"></span></div>
+        <button @click="remove(b.id)" class="text-rose-700 p-1" title="Remover"><i class="fa-solid fa-trash"></i></button></div></template>
+    </div>
+    <div class="p-6 border-t border-wood-200 bg-white space-y-4">
+      <div class="flex justify-between font-serif font-bold text-base"><span>Total</span><span x-text="money(total)"></span></div>
+      <button @click="checkout()" :disabled="!cart.length||busy" class="btn w-full !py-3.5"><i class="fa-solid fa-lock text-amber-500"></i><span x-text="busy?'Processando...':'Finalizar Compra'"></span></button>
+      <p class="text-[11px] text-center text-wood-600">Pagamento simulado para demonstração. Os livros são liberados na hora.</p>
+    </div>
+  </aside>
+</div>
 
-                // New book creation form
-                newBook: {
-                    title: '',
-                    author: '',
-                    category: 'Ficção',
-                    price: '',
-                    stock: 10,
-                    synopsis: '',
-                    coverBg: 'linear-gradient(135deg, #3d2216, #170d08)'
-                },
+<!-- LOGIN / CADASTRO -->
+<div x-show="authOpen" x-cloak class="modal"><div class="card max-w-md w-full p-6 sm:p-8 relative space-y-5">
+  <button @click="authOpen=false" class="absolute top-5 right-5 text-xl text-wood-500"><i class="fa-solid fa-xmark"></i></button>
+  <div class="flex bg-parchment-100 rounded-xl p-1 border border-wood-200">
+    <button @click="authMode='login';authErr=''" :class="authMode==='login'?'bg-wood-900 text-amber-100 font-bold':'text-wood-700'" class="flex-1 py-2 rounded-lg text-xs">Entrar</button>
+    <button @click="authMode='register';authErr=''" :class="authMode==='register'?'bg-wood-900 text-amber-100 font-bold':'text-wood-700'" class="flex-1 py-2 rounded-lg text-xs">Cadastrar</button></div>
+  <form @submit.prevent="submitAuth()" class="space-y-3">
+    <input x-show="authMode==='register'" x-model="form.name" :required="authMode==='register'" placeholder="Nome completo" class="inp">
+    <input type="email" x-model="form.email" required placeholder="seu@email.com" class="inp">
+    <input type="password" x-model="form.password" required minlength="6" placeholder="Senha (mín. 6 caracteres)" class="inp">
+    <p x-show="authErr" x-text="authErr" class="text-xs font-semibold text-rose-700"></p>
+    <button :disabled="busy" class="btn w-full !py-3.5" x-text="busy?'Aguarde...':(authMode==='login'?'Acessar Conta':'Criar Minha Conta')"></button>
+  </form></div></div>
 
-                // New review form state
-                newReview: {
-                    rating: 5,
-                    comment: ''
-                },
+<!-- AVALIAÇÃO -->
+<div x-show="reviewOpen" x-cloak class="modal"><div class="card max-w-md w-full p-6 relative space-y-4">
+  <button @click="reviewOpen=false" class="absolute top-4 right-4 text-wood-500"><i class="fa-solid fa-xmark"></i></button>
+  <h3 class="font-serif font-bold text-lg">Deixar Avaliação</h3>
+  <form @submit.prevent="submitReview()" class="space-y-4">
+    <div class="flex gap-2 text-2xl"><template x-for="s in 5"><i class="fa-solid fa-star cursor-pointer" :class="s<=newReview.rating?'text-amber-500':'text-wood-200'" @click="newReview.rating=s"></i></template></div>
+    <textarea x-model="newReview.comment" required rows="3" placeholder="Compartilhe sua opinião..." class="inp"></textarea>
+    <button :disabled="busy" class="btn w-full">Enviar Avaliação</button></form></div></div>
 
-                // Shopping Cart state
-                cart: [],
+<!-- DÚVIDA -->
+<div x-show="questionOpen" x-cloak class="modal"><div class="card max-w-md w-full p-6 relative space-y-4">
+  <button @click="questionOpen=false" class="absolute top-4 right-4 text-wood-500"><i class="fa-solid fa-xmark"></i></button>
+  <h3 class="font-serif font-bold text-lg">Enviar Dúvida</h3>
+  <form @submit.prevent="submitQuestion()" class="space-y-4">
+    <textarea x-model="newQ" required rows="3" placeholder="Escreva sua dúvida..." class="inp"></textarea>
+    <button :disabled="busy" class="btn w-full">Enviar Pergunta</button></form></div></div>
 
-                // Sales / Orders history state
-                orders: [],
+<!-- AVISO -->
+<div x-show="toast.show" x-cloak x-transition class="fixed bottom-6 right-6 z-50 px-5 py-3 rounded-2xl bg-wood-900 text-amber-100 font-semibold text-xs shadow-2xl border border-wood-700 flex items-center gap-3 max-w-xs"><i class="fa-solid fa-circle-check text-amber-500 text-base"></i><span x-text="toast.msg"></span></div>
 
-                // Reviews state
-                reviews: [
-                    { id: 1, userName: 'Carlos Silva', rating: 5, date: '12/09/2026', comment: 'Plataforma incrível! Transmite a sensação perfeita de uma grande biblioteca.' },
-                    { id: 2, userName: 'Ana Beatriz', rating: 5, date: '18/09/2026', comment: 'Tons de madeira e pergaminho muito elegantes e agradáveis para leitura.' }
-                ],
+<footer class="bg-wood-950 text-wood-200 py-8 mt-12">
+  <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+    <span class="font-serif font-bold text-amber-100 text-sm"><i class="fa-solid fa-book-bookmark mr-2 text-amber-500"></i>Lumina Livros</span>
+    <p>© 2026 Lumina Livros. Plataforma de venda e leitura de livros digitais.</p>
+    <a href="admin.html" class="opacity-60 hover:opacity-100 underline">Área administrativa</a>
+  </div>
+</footer>
 
-                // FAQs state
-                faqs: [
-                    { question: 'Como funciona o envio dos livros?', answer: 'Enviamos para todo o Brasil via transportadoras parceiras e Correios com código de rastreamento por e-mail.', open: false },
-                    { question: 'Como posso cadastrar novos livros no acervo?', answer: 'Acesse a aba "Gestão de Vendas" no menu superior e utilize o formulário de cadastro de livros.', open: false },
-                    { question: 'A plataforma é compatível com celulares e computadores?', answer: 'Sim! A Lumina foi totalmente adaptada para computadores, notebooks, tablets e smartphones.', open: false }
-                ],
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/compras.js"></script>
+<script src="js/avaliacoes.js"></script>
+<script>
+function storeApp(){return{
+  tab:'home', menu:false, cartOpen:false, authOpen:false, authMode:'login', authErr:'', reviewOpen:false, questionOpen:false,
+  q:'', cat:'Todos', loading:true, busy:false, openFaq:null,
+  user:null, books:[], library:[], cart:[], reviews:[], apiQuestions:[], newQ:'', newReview:{rating:5,comment:''},
+  form:{name:'',email:'',password:''}, toast:{show:false,msg:''},
+  staticFaqs:[
+    {question:'Como leio um livro depois de comprar?',answer:'Ele aparece na aba "Minha Biblioteca". Basta clicar em "Ler agora".'},
+    {question:'Preciso de conta para comprar?',answer:'Sim. Seus livros ficam vinculados à sua conta, então você pode lê-los sempre que entrar.'},
+    {question:'Posso comprar o mesmo livro duas vezes?',answer:'Não. Depois de comprado, o livro fica na sua biblioteca para sempre.'}],
 
-                // Notification Toast
-                toast: {
-                    show: false,
-                    message: ''
-                },
+  async init(){
+    this.cart=Compras.carrinho();
+    this.user=await Auth.me();
+    await Promise.all([this.loadBooks(),this.loadReviews(),this.loadQuestions(),this.loadLibrary()]);
+    this.cart=this.cart.filter(c=>this.books.some(b=>b.id===c.id)&&!this.owned(c)); Compras.salvar(this.cart);
+    this.loading=false;
+  },
+  async loadBooks(){ try{ this.books=await Compras.listarLivros(); }catch(e){ this.notify(e.message); } },
+  async loadReviews(){ try{ this.reviews=await Avaliacoes.listar(); }catch{} },
+  async loadQuestions(){ try{ this.apiQuestions=await Avaliacoes.listarDuvidas(); }catch{} },
+  async loadLibrary(){ if(!this.user){ this.library=[]; return; } try{ this.library=await Compras.minhaBiblioteca(); }catch{} },
 
-                initApp() {
-                    // Default session setup
-                    this.currentUser = {
-                        name: 'Leitor Lumina',
-                        email: 'admin@lumina.com',
-                        role: 'Administrador'
-                    };
-                },
+  get tabs(){ const t=[{id:'home',label:'Início',icon:'fa-house'},{id:'catalog',label:'Acervo / Catálogo',icon:'fa-book-open'}];
+    if(this.user) t.push({id:'library',label:'Minha Biblioteca',icon:'fa-bookmark'});
+    t.push({id:'community',label:'Avaliações & Dúvidas',icon:'fa-comments'}); return t; },
+  get filtered(){ const s=this.q.toLowerCase(); return this.books.filter(b=>(this.cat==='Todos'||b.category===this.cat)&&(b.title.toLowerCase().includes(s)||b.author.toLowerCase().includes(s))); },
+  get faqs(){ return [...this.staticFaqs,...this.apiQuestions]; },
+  get total(){ return Compras.total(this.cart); },
 
-                showNotification(msg) {
-                    this.toast.message = msg;
-                    this.toast.show = true;
-                    setTimeout(() => {
-                        this.toast.show = false;
-                    }, 3500);
-                },
+  money:v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v||0),
+  coverStyle(b){ const c=[['#3d2216','#170d08'],['#78350f','#28160e'],['#1e3a8a','#0f172a'],['#065f46','#022c22']][b.id%4]; return 'background:linear-gradient(135deg,'+c[0]+','+c[1]+')'; },
+  notify(msg){ this.toast={show:true,msg}; setTimeout(()=>this.toast.show=false,3500); },
 
-                // Filtered Books getter
-                get filteredBooks() {
-                    return this.books.filter(book => {
-                        const matchesCategory = this.selectedCategory === 'Todos' || book.category === this.selectedCategory;
-                        const matchesQuery = book.title.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
-                                             book.author.toLowerCase().includes(this.searchQuery.toLowerCase());
-                        return matchesCategory && matchesQuery;
-                    });
-                },
+  owned(b){ return this.library.some(l=>l.id===b.id); },
+  inCart(b){ return this.cart.some(c=>c.id===b.id); },
+  add(b){ if(this.owned(b)) return; this.cart=Compras.adicionar(this.cart,b); Compras.salvar(this.cart); this.notify('"'+b.title+'" adicionado ao carrinho!'); },
+  remove(id){ this.cart=this.cart.filter(b=>b.id!==id); Compras.salvar(this.cart); },
+  read(id){ const l=this.library.find(b=>b.id===id); if(l&&l.fileUrl) window.open(l.fileUrl,'_blank'); else this.notify('O arquivo deste livro ainda não foi enviado.'); },
 
-                // Cart computations
-                get cartTotalCount() {
-                    return this.cart.reduce((sum, item) => sum + item.quantity, 0);
-                },
+  async checkout(){
+    if(!this.user){ this.cartOpen=false; return this.openAuth('login'); }
+    this.busy=true;
+    try{ await Compras.finalizar(this.cart); this.cart=[]; await this.loadLibrary(); this.cartOpen=false; this.tab='library'; this.notify('Compra concluída! Seus livros já estão na biblioteca.'); }
+    catch(e){ this.notify(e.message); } finally{ this.busy=false; }
+  },
 
-                get cartSubtotal() {
-                    return this.cart.reduce((sum, item) => sum + (item.book.price * item.quantity), 0);
-                },
+  openAuth(mode){ this.authMode=mode; this.authErr=''; this.authOpen=true; },
+  need(fn){ if(!this.user){ this.notify('Entre na sua conta para continuar.'); return this.openAuth('login'); } fn(); },
+  async submitAuth(){
+    this.authErr=''; this.busy=true;
+    try{ const f=this.form;
+      this.user=this.authMode==='login'?await Auth.login(f.email,f.password):await Auth.register(f.name,f.email,f.password);
+      this.authOpen=false; this.form={name:'',email:'',password:''}; await this.loadLibrary(); this.notify('Bem-vindo(a), '+this.user.name+'!');
+    }catch(e){ this.authErr=e.message; } finally{ this.busy=false; }
+  },
+  logout(){ Auth.logout(); this.user=null; this.library=[]; if(this.tab==='library') this.tab='home'; this.notify('Sessão encerrada.'); },
 
-                toggleCart() {
-                    this.cartOpen = !this.cartOpen;
-                },
-
-                addToCart(book) {
-                    const existing = this.cart.find(i => i.book.id === book.id);
-                    if (existing) {
-                        existing.quantity++;
-                    } else {
-                        this.cart.push({ book: book, quantity: 1 });
-                    }
-                    this.showNotification(`"${book.title}" adicionado ao carrinho!`);
-                },
-
-                updateCartQuantity(bookId, delta) {
-                    const item = this.cart.find(i => i.book.id === bookId);
-                    if (item) {
-                        item.quantity += delta;
-                        if (item.quantity <= 0) {
-                            this.removeFromCart(bookId);
-                        }
-                    }
-                },
-
-                removeFromCart(bookId) {
-                    this.cart = this.cart.filter(i => i.book.id !== bookId);
-                },
-
-                checkout() {
-                    if (this.cart.length === 0) return;
-
-                    // Create new order record
-                    const newOrder = {
-                        id: Math.floor(100000 + Math.random() * 900000),
-                        customerName: this.currentUser ? this.currentUser.name : 'Leitor Visitante',
-                        date: new Date().toLocaleDateString('pt-BR'),
-                        items: [...this.cart],
-                        total: this.cartSubtotal
-                    };
-
-                    this.orders.unshift(newOrder);
-
-                    // Update stock for purchased books
-                    this.cart.forEach(item => {
-                        const b = this.books.find(book => book.id === item.book.id);
-                        if (b) {
-                            b.stock = Math.max(0, b.stock - item.quantity);
-                        }
-                    });
-
-                    this.cart = [];
-                    this.cartOpen = false;
-                    this.showNotification('Compra realizada com sucesso!');
-                    this.currentTab = 'admin';
-                    this.adminTab = 'orders';
-                },
-
-                // Admin Functions
-                saveBook() {
-                    if (!this.newBook.title || !this.newBook.author || !this.newBook.price) return;
-
-                    const bookObj = {
-                        id: Date.now(),
-                        title: this.newBook.title,
-                        author: this.newBook.author,
-                        category: this.newBook.category,
-                        price: parseFloat(this.newBook.price),
-                        stock: parseInt(this.newBook.stock) || 10,
-                        synopsis: this.newBook.synopsis || 'Sem sinopse cadastrada.',
-                        coverBg: this.newBook.coverBg
-                    };
-
-                    this.books.push(bookObj);
-                    
-                    // Reset form
-                    this.newBook.title = '';
-                    this.newBook.author = '';
-                    this.newBook.price = '';
-                    this.newBook.synopsis = '';
-
-                    this.showNotification('Novo livro cadastrado com sucesso!');
-                },
-
-                deleteBook(id) {
-                    this.books = this.books.filter(b => b.id !== id);
-                    this.showNotification('Livro removido do acervo.');
-                },
-
-                addSampleBook() {
-                    const sample = {
-                        id: Date.now(),
-                        title: 'A Arte da Leitura Clássica',
-                        author: 'Eduardo M. Luz',
-                        category: 'Ficção',
-                        price: 45.90,
-                        stock: 12,
-                        synopsis: 'Uma jornada inspiradora através da história das grandes bibliotecas e a evolução dos livros.',
-                        coverBg: 'linear-gradient(135deg, #3d2216, #170d08)'
-                    };
-                    this.books.push(sample);
-                    this.showNotification('Livro de exemplo adicionado!');
-                },
-
-                getTotalSales() {
-                    return this.orders.reduce((sum, ord) => sum + ord.total, 0);
-                },
-
-                // Auth Functions
-                openAuthModal(mode) {
-                    this.authMode = mode;
-                    this.showAuthModal = true;
-                },
-
-                handleAuth() {
-                    if (!this.authForm.email) return;
-                    this.currentUser = {
-                        name: this.authForm.name || 'Leitor Lumina',
-                        email: this.authForm.email,
-                        role: 'Cliente'
-                    };
-                    this.showAuthModal = false;
-                    this.showNotification(`Bem-vindo(a), ${this.currentUser.name}!`);
-                },
-
-                logout() {
-                    this.currentUser = null;
-                    this.showNotification('Sessão encerrada.');
-                },
-
-                // Review & FAQ submissions
-                submitReview() {
-                    if (!this.newReview.comment) return;
-                    this.reviews.unshift({
-                        id: Date.now(),
-                        userName: this.currentUser ? this.currentUser.name : 'Leitor Anônimo',
-                        rating: this.newReview.rating,
-                        date: new Date().toLocaleDateString('pt-BR'),
-                        comment: this.newReview.comment
-                    });
-                    this.newReview = { rating: 5, comment: '' };
-                    this.showReviewModal = false;
-                    this.showNotification('Sua avaliação foi enviada com sucesso!');
-                },
-
-                submitQuestion() {
-                    if (!this.newQuestionText) return;
-                    this.faqs.push({
-                        question: this.newQuestionText,
-                        answer: 'Obrigado por sua pergunta! Nossa equipe responderá em breve.',
-                        open: true
-                    });
-                    this.newQuestionText = '';
-                    this.showQuestionModal = false;
-                    this.showNotification('Sua pergunta foi enviada!');
-                },
-
-                formatCurrency(val) {
-                    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val || 0);
-                }
-            }
-        }
-    </script>
+  async submitReview(){
+    this.busy=true;
+    try{ await Avaliacoes.enviar(this.newReview.rating,this.newReview.comment); this.newReview={rating:5,comment:''}; this.reviewOpen=false; await this.loadReviews(); this.notify('Avaliação enviada!'); }
+    catch(e){ this.notify(e.message); } finally{ this.busy=false; }
+  },
+  async submitQuestion(){
+    this.busy=true;
+    try{ await Avaliacoes.enviarDuvida(this.newQ); this.newQ=''; this.questionOpen=false; await this.loadQuestions(); this.notify('Pergunta enviada!'); }
+    catch(e){ this.notify(e.message); } finally{ this.busy=false; }
+  }
+}}
+</script>
 </body>
 </html>
