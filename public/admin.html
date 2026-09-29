@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Administrativo | Lumina Livros</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={theme:{extend:{colors:{parchment:{50:'#FAF7F2',100:'#F3ECE0'},wood:{950:'#170D08',900:'#28160E',800:'#3D2216',600:'#73432B',300:'#C9B49A',200:'#D9C8B5',100:'#EFE6DC'},amber:{800:'#92400E',700:'#B45309',100:'#FEF3C7'}},fontFamily:{serif:['Lora','Georgia','serif']}}}}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:wght@600;700&display=swap" rel="stylesheet">
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<style>body{font-family:Inter,sans-serif;background:#FAF7F2;color:#28160E}</style>
+</head>
+<body x-data="adminApp()" x-init="init()" class="min-h-screen">
+
+<!-- Tela de senha -->
+<div x-show="!logado" class="min-h-screen flex items-center justify-center p-4">
+  <form @submit.prevent="entrar()" class="bg-white border border-wood-200 rounded-3xl p-8 w-full max-w-sm space-y-4 shadow-lg">
+    <h1 class="font-serif text-2xl font-bold">Área administrativa</h1>
+    <p class="text-xs text-wood-600">Informe a senha do administrador para gerenciar livros e pedidos.</p>
+    <input type="password" x-model="senha" required placeholder="Senha do administrador" class="w-full border border-wood-300 rounded-xl px-4 py-2.5 text-sm bg-parchment-50">
+    <p x-show="erro" x-text="erro" class="text-xs font-semibold text-rose-700"></p>
+    <button class="w-full py-3 rounded-xl bg-wood-900 text-amber-100 font-bold text-sm">Entrar no painel</button>
+    <a href="index.html" class="block text-center text-xs text-amber-800 underline">Voltar à loja</a>
+  </form>
+</div>
+
+<!-- Painel -->
+<div x-show="logado" class="max-w-6xl mx-auto p-4 sm:p-8 space-y-6">
+  <header class="flex flex-wrap items-center justify-between gap-3 bg-white border border-wood-200 rounded-2xl p-5">
+    <h1 class="font-serif text-2xl font-bold">Painel Lumina</h1>
+    <div class="flex gap-2 text-xs">
+      <button @click="aba='livros'" :class="aba==='livros'?'bg-wood-900 text-amber-100':'bg-white'" class="px-4 py-2 rounded-xl border border-wood-300 font-bold">Livros (<span x-text="livros.length"></span>)</button>
+      <button @click="aba='pedidos'" :class="aba==='pedidos'?'bg-wood-900 text-amber-100':'bg-white'" class="px-4 py-2 rounded-xl border border-wood-300 font-bold">Pedidos (<span x-text="pedidos.length"></span>)</button>
+      <a href="index.html" class="px-4 py-2 rounded-xl border border-wood-300 bg-white">Ver loja</a>
+      <button @click="sair()" class="px-4 py-2 rounded-xl border border-wood-300 bg-white text-rose-700">Sair</button>
+    </div>
+  </header>
+  <p x-show="msg" x-text="msg" class="text-xs font-semibold text-amber-800 bg-amber-100 rounded-xl px-4 py-2"></p>
+
+  <div x-show="aba==='livros'" class="grid lg:grid-cols-12 gap-6">
+    <form @submit.prevent="salvarLivro()" class="lg:col-span-5 bg-white border border-wood-200 rounded-2xl p-5 space-y-3 text-xs">
+      <h2 class="font-serif text-lg font-bold">Cadastrar livro</h2>
+      <input x-model="f.title" required placeholder="Título" class="w-full border border-wood-300 rounded-xl px-3 py-2">
+      <input x-model="f.author" required placeholder="Autor" class="w-full border border-wood-300 rounded-xl px-3 py-2">
+      <select x-model="f.category" class="w-full border border-wood-300 rounded-xl px-3 py-2">
+        <option>Ficção</option><option>Não-Ficção</option><option>Tecnologia</option><option>Desenvolvimento Pessoal</option><option>Negócios</option>
+      </select>
+      <div class="grid grid-cols-2 gap-3">
+        <input type="number" step="0.01" min="1" x-model.number="f.price" required placeholder="Preço (R$)" class="border border-wood-300 rounded-xl px-3 py-2">
+        <input type="number" min="0" x-model.number="f.stock" required placeholder="Estoque" class="border border-wood-300 rounded-xl px-3 py-2">
+      </div>
+      <textarea x-model="f.synopsis" rows="3" required placeholder="Sinopse" class="w-full border border-wood-300 rounded-xl px-3 py-2"></textarea>
+      <label class="block font-bold">Capa (opcional)
+        <input type="file" accept="image/*" x-ref="capa" class="mt-1 block w-full font-normal">
+      </label>
+      <p class="text-wood-600">Sem imagem, a loja mostra a capa em cor automaticamente.</p>
+      <button class="w-full py-3 rounded-xl bg-wood-900 text-amber-100 font-bold">Salvar livro</button>
+    </form>
+    <div class="lg:col-span-7 bg-white border border-wood-200 rounded-2xl p-5 overflow-x-auto">
+      <table class="w-full text-xs text-left">
+        <thead class="bg-wood-900 text-amber-100"><tr><th class="p-3">Livro</th><th class="p-3">Preço</th><th class="p-3">Estoque</th><th class="p-3"></th></tr></thead>
+        <tbody class="divide-y divide-wood-200">
+          <template x-for="b in livros" :key="b.id"><tr>
+            <td class="p-3 font-semibold"><span x-text="b.title"></span><br><span class="font-normal text-wood-600" x-text="b.author"></span></td>
+            <td class="p-3" x-text="moeda(b.price)"></td><td class="p-3" x-text="b.stock"></td>
+            <td class="p-3 text-right"><button @click="excluir(b.id)" class="text-rose-700 font-bold">Excluir</button></td>
+          </tr></template>
+        </tbody>
+      </table>
+      <p x-show="!livros.length" class="text-center text-xs text-wood-600 py-6">Nenhum livro cadastrado. Use o formulário ao lado.</p>
+    </div>
+  </div>
+
+  <div x-show="aba==='pedidos'" class="bg-white border border-wood-200 rounded-2xl p-5 overflow-x-auto">
+    <p class="text-sm font-bold mb-3">Faturamento: <span class="text-amber-800" x-text="moeda(pedidos.reduce((s,p)=>s+Number(p.total),0))"></span></p>
+    <table class="w-full text-xs text-left">
+      <thead class="bg-wood-900 text-amber-100"><tr><th class="p-3">Pedido</th><th class="p-3">Cliente</th><th class="p-3">Data</th><th class="p-3">Total</th></tr></thead>
+      <tbody class="divide-y divide-wood-200">
+        <template x-for="p in pedidos" :key="p.id"><tr>
+          <td class="p-3 font-bold" x-text="'#'+p.id"></td><td class="p-3" x-text="p.customerName"></td>
+          <td class="p-3" x-text="new Date(p.created_at).toLocaleDateString('pt-BR')"></td><td class="p-3 font-bold" x-text="moeda(p.total)"></td>
+        </tr></template>
+      </tbody>
+    </table>
+    <p x-show="!pedidos.length" class="text-center text-xs text-wood-600 py-6">Nenhum pedido até o momento.</p>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/compras.js"></script>
+<script>
+function adminApp(){return{
+  logado:false, senha:'', erro:'', msg:'', aba:'livros', livros:[], pedidos:[],
+  f:{title:'',author:'',category:'Ficção',price:'',stock:10,synopsis:''},
+  moeda:v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v||0),
+  async init(){ if(Auth.adminLogado()) await this.carregar(); },
+  async carregar(){
+    try{ this.livros=await Compras.listarLivros(); this.pedidos=await Compras.todosPedidos(); this.logado=true; }
+    catch(e){ Auth.adminLogout(); this.logado=false; this.erro='Sessão expirada. Entre novamente.'; }
+  },
+  async entrar(){
+    this.erro='';
+    try{ await Auth.adminLogin(this.senha); this.senha=''; await this.carregar(); }
+    catch(e){ this.erro=e.message; }
+  },
+  sair(){ Auth.adminLogout(); this.logado=false; },
+  aviso(t){ this.msg=t; setTimeout(()=>this.msg='',3500); },
+  async salvarLivro(){
+    try{
+      let cover_url=null; const arq=this.$refs.capa.files[0]; // sem arquivo = livro sem capa
+      if(arq){
+        const r=await fetch(API_URL+'/upload?filename='+encodeURIComponent(arq.name),{method:'POST',headers:{Authorization:'Bearer '+Api.getToken('admin')},body:arq});
+        const d=await r.json(); if(!r.ok) throw new Error(d.error); cover_url=d.url;
+      }
+      await Api.req('/books',{method:'POST',tipo:'admin',body:{...this.f,cover_url}});
+      this.f={title:'',author:'',category:'Ficção',price:'',stock:10,synopsis:''}; this.$refs.capa.value='';
+      this.livros=await Compras.listarLivros(); this.aviso('Livro salvo.');
+    }catch(e){ this.aviso(e.message); }
+  },
+  async excluir(id){
+    if(!confirm('Excluir este livro?')) return;
+    try{ await Api.req('/books/'+id,{method:'DELETE',tipo:'admin'}); this.livros=this.livros.filter(b=>b.id!==id); this.aviso('Livro excluído.'); }
+    catch(e){ this.aviso(e.message); }
+  }
+}}
+</script>
+</body>
+</html>
