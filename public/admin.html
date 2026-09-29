@@ -47,24 +47,25 @@ tailwind.config={theme:{extend:{colors:{parchment:{50:'#FAF7F2',100:'#F3ECE0'},w
       <select x-model="f.category" class="w-full border border-wood-300 rounded-xl px-3 py-2">
         <option>Ficção</option><option>Não-Ficção</option><option>Tecnologia</option><option>Desenvolvimento Pessoal</option><option>Negócios</option>
       </select>
-      <div class="grid grid-cols-2 gap-3">
-        <input type="number" step="0.01" min="1" x-model.number="f.price" required placeholder="Preço (R$)" class="border border-wood-300 rounded-xl px-3 py-2">
-        <input type="number" min="0" x-model.number="f.stock" required placeholder="Estoque" class="border border-wood-300 rounded-xl px-3 py-2">
-      </div>
+      <input type="number" step="0.01" min="1" x-model.number="f.price" required placeholder="Preço (R$)" class="w-full border border-wood-300 rounded-xl px-3 py-2">
       <textarea x-model="f.synopsis" rows="3" required placeholder="Sinopse" class="w-full border border-wood-300 rounded-xl px-3 py-2"></textarea>
       <label class="block font-bold">Capa (opcional)
         <input type="file" accept="image/*" x-ref="capa" class="mt-1 block w-full font-normal">
       </label>
       <p class="text-wood-600">Sem imagem, a loja mostra a capa em cor automaticamente.</p>
+      <label class="block font-bold">Arquivo do livro (PDF)
+        <input type="file" accept="application/pdf" x-ref="arquivo" class="mt-1 block w-full font-normal">
+      </label>
+      <p class="text-wood-600">Só é liberado para quem comprar. Máximo de 4 MB.</p>
       <button class="w-full py-3 rounded-xl bg-wood-900 text-amber-100 font-bold">Salvar livro</button>
     </form>
     <div class="lg:col-span-7 bg-white border border-wood-200 rounded-2xl p-5 overflow-x-auto">
       <table class="w-full text-xs text-left">
-        <thead class="bg-wood-900 text-amber-100"><tr><th class="p-3">Livro</th><th class="p-3">Preço</th><th class="p-3">Estoque</th><th class="p-3"></th></tr></thead>
+        <thead class="bg-wood-900 text-amber-100"><tr><th class="p-3">Livro</th><th class="p-3">Preço</th><th class="p-3">PDF</th><th class="p-3"></th></tr></thead>
         <tbody class="divide-y divide-wood-200">
           <template x-for="b in livros" :key="b.id"><tr>
             <td class="p-3 font-semibold"><span x-text="b.title"></span><br><span class="font-normal text-wood-600" x-text="b.author"></span></td>
-            <td class="p-3" x-text="moeda(b.price)"></td><td class="p-3" x-text="b.stock"></td>
+            <td class="p-3" x-text="moeda(b.price)"></td><td class="p-3" x-text="b.hasFile?'Sim':'Não'"></td>
             <td class="p-3 text-right"><button @click="excluir(b.id)" class="text-rose-700 font-bold">Excluir</button></td>
           </tr></template>
         </tbody>
@@ -94,7 +95,7 @@ tailwind.config={theme:{extend:{colors:{parchment:{50:'#FAF7F2',100:'#F3ECE0'},w
 <script>
 function adminApp(){return{
   logado:false, senha:'', erro:'', msg:'', aba:'livros', livros:[], pedidos:[],
-  f:{title:'',author:'',category:'Ficção',price:'',stock:10,synopsis:''},
+  f:{title:'',author:'',category:'Ficção',price:'',synopsis:''},
   moeda:v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v||0),
   async init(){ if(Auth.adminLogado()) await this.carregar(); },
   async carregar(){
@@ -108,15 +109,17 @@ function adminApp(){return{
   },
   sair(){ Auth.adminLogout(); this.logado=false; },
   aviso(t){ this.msg=t; setTimeout(()=>this.msg='',3500); },
+  async enviar(arq){ // devolve a URL do arquivo enviado, ou null se não houver arquivo
+    if(!arq) return null;
+    const r=await fetch(API_URL+'/upload?filename='+encodeURIComponent(arq.name),{method:'POST',headers:{Authorization:'Bearer '+Api.getToken('admin')},body:arq});
+    const d=await r.json(); if(!r.ok) throw new Error(d.error); return d.url;
+  },
   async salvarLivro(){
     try{
-      let cover_url=null; const arq=this.$refs.capa.files[0]; // sem arquivo = livro sem capa
-      if(arq){
-        const r=await fetch(API_URL+'/upload?filename='+encodeURIComponent(arq.name),{method:'POST',headers:{Authorization:'Bearer '+Api.getToken('admin')},body:arq});
-        const d=await r.json(); if(!r.ok) throw new Error(d.error); cover_url=d.url;
-      }
-      await Api.req('/books',{method:'POST',tipo:'admin',body:{...this.f,cover_url}});
-      this.f={title:'',author:'',category:'Ficção',price:'',stock:10,synopsis:''}; this.$refs.capa.value='';
+      const cover_url=await this.enviar(this.$refs.capa.files[0]);
+      const file_url=await this.enviar(this.$refs.arquivo.files[0]);
+      await Api.req('/books',{method:'POST',tipo:'admin',body:{...this.f,cover_url,file_url}});
+      this.f={title:'',author:'',category:'Ficção',price:'',synopsis:''}; this.$refs.capa.value=''; this.$refs.arquivo.value='';
       this.livros=await Compras.listarLivros(); this.aviso('Livro salvo.');
     }catch(e){ this.aviso(e.message); }
   },
