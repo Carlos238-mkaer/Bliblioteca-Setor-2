@@ -85,7 +85,7 @@ body{font-family:Inter,sans-serif;color:#28160E;background-color:#FAF7F2;backgro
     </div></div>
   </div>
   <div class="grid md:grid-cols-3 gap-6">
-    <div class="card p-6 space-y-2"><i class="fa-solid fa-bolt text-2xl text-amber-700"></i><h3 class="font-bold text-lg">Leitura Imediata</h3><p class="text-sm text-wood-600">Comprou, liberou. O livro aparece na sua biblioteca assim que o pedido é concluído.</p></div>
+    <div class="card p-6 space-y-2"><i class="fa-solid fa-bolt text-2xl text-amber-700"></i><h3 class="font-bold text-lg">Leitura Imediata</h3><p class="text-sm text-wood-600">Pagou com Pix, leu. Assim que o pagamento é confirmado, o livro aparece na sua biblioteca.</p></div>
     <div class="card p-6 space-y-2"><i class="fa-solid fa-shield-halved text-2xl text-amber-700"></i><h3 class="font-bold text-lg">Conta Segura</h3><p class="text-sm text-wood-600">Seus livros ficam vinculados à sua conta, protegida por senha.</p></div>
     <div class="card p-6 space-y-2"><i class="fa-solid fa-mobile-screen text-2xl text-amber-700"></i><h3 class="font-bold text-lg">Em Qualquer Tela</h3><p class="text-sm text-wood-600">Design responsivo para celular, tablet e computador.</p></div>
   </div>
@@ -139,6 +139,13 @@ body{font-family:Inter,sans-serif;color:#28160E;background-color:#FAF7F2;backgro
       <button @click="read(b.id)" :disabled="!b.fileUrl" class="btn shrink-0"><i class="fa-solid fa-book-open text-amber-500"></i><span x-text="b.fileUrl?'Ler agora':'Arquivo em breve'"></span></button>
     </div>
   </template>
+  <div x-show="user && orders.length" class="space-y-3 pt-4">
+    <h3 class="font-serif font-bold text-lg">Meus pedidos</h3>
+    <template x-for="o in orders" :key="o.id"><div class="card p-4 flex items-center justify-between gap-3 text-sm">
+      <div><b x-text="'Pedido #'+o.id"></b> <span class="text-xs text-wood-600" x-text="new Date(o.created_at).toLocaleDateString('pt-BR')+' · '+money(o.total)"></span></div>
+      <div class="flex items-center gap-3"><span class="text-xs font-bold px-2.5 py-1 rounded-full" :class="o.status==='pago'?'bg-emerald-100 text-emerald-800':o.status==='pendente'?'bg-amber-100 text-amber-800':'bg-rose-100 text-rose-800'" x-text="o.status==='pendente'?'Aguardando pagamento':o.status==='pago'?'Pago':'Cancelado'"></span>
+      <button x-show="o.status==='pendente'" @click="showPix(o)" class="btn2">Ver Pix</button></div></div></template>
+  </div>
 </section>
 
 <!-- AVALIAÇÕES & DÚVIDAS -->
@@ -176,8 +183,8 @@ body{font-family:Inter,sans-serif;color:#28160E;background-color:#FAF7F2;backgro
     </div>
     <div class="p-6 border-t border-wood-200 bg-white space-y-4">
       <div class="flex justify-between font-serif font-bold text-base"><span>Total</span><span x-text="money(total)"></span></div>
-      <button @click="checkout()" :disabled="!cart.length||busy" class="btn w-full !py-3.5"><i class="fa-solid fa-lock text-amber-500"></i><span x-text="busy?'Processando...':'Finalizar Compra'"></span></button>
-      <p class="text-[11px] text-center text-wood-600">Pagamento simulado para demonstração. Os livros são liberados na hora.</p>
+      <button @click="checkout()" :disabled="!cart.length||busy" class="btn w-full !py-3.5"><i class="fa-solid fa-lock text-amber-500"></i><span x-text="busy?'Gerando Pix...':'Pagar com Pix'"></span></button>
+      <p class="text-[11px] text-center text-wood-600">Pagamento via Pix. Os livros são liberados após a confirmação do pagamento pela nossa equipe.</p>
     </div>
   </aside>
 </div>
@@ -213,6 +220,18 @@ body{font-family:Inter,sans-serif;color:#28160E;background-color:#FAF7F2;backgro
     <textarea x-model="newQ" required rows="3" placeholder="Escreva sua dúvida..." class="inp"></textarea>
     <button :disabled="busy" class="btn w-full">Enviar Pergunta</button></form></div></div>
 
+<!-- PIX -->
+<div x-show="pixOpen" x-cloak class="modal"><div class="card max-w-md w-full p-6 relative space-y-4 text-center">
+  <button @click="pixOpen=false" class="absolute top-4 right-4 text-wood-500"><i class="fa-solid fa-xmark"></i></button>
+  <h3 class="font-serif font-bold text-xl">Pague com Pix</h3>
+  <p class="text-sm text-wood-700" x-show="pix"><b x-text="'Pedido #'+(pix&&pix.id)"></b> · <b x-text="money(pix&&pix.total)"></b></p>
+  <div x-ref="qr" class="flex justify-center"></div>
+  <p x-show="pix&&!pix.pix" class="text-xs text-rose-700">Não foi possível gerar o código. Fale com a equipe.</p>
+  <textarea readonly rows="3" class="inp text-[10px] break-all" x-text="pix&&pix.pix"></textarea>
+  <button @click="copyPix()" class="btn w-full"><i class="fa-regular fa-copy text-amber-500"></i> Copiar código Pix</button>
+  <p class="text-[11px] text-wood-600">Pague pelo app do seu banco (QR Code ou "Pix copia e cola"). Depois que nossa equipe confirmar, o livro aparece em Minha Biblioteca. Acompanhe em "Meus pedidos".</p>
+</div></div>
+
 <!-- AVISO -->
 <div x-show="toast.show" x-cloak x-transition class="fixed bottom-6 right-6 z-50 px-5 py-3 rounded-2xl bg-wood-900 text-amber-100 font-semibold text-xs shadow-2xl border border-wood-700 flex items-center gap-3 max-w-xs"><i class="fa-solid fa-circle-check text-amber-500 text-base"></i><span x-text="toast.msg"></span></div>
 
@@ -224,6 +243,7 @@ body{font-family:Inter,sans-serif;color:#28160E;background-color:#FAF7F2;backgro
   </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="js/api.js"></script>
 <script src="js/auth.js"></script>
 <script src="js/compras.js"></script>
@@ -232,23 +252,25 @@ body{font-family:Inter,sans-serif;color:#28160E;background-color:#FAF7F2;backgro
 function storeApp(){return{
   tab:'home', menu:false, cartOpen:false, authOpen:false, authMode:'login', authErr:'', reviewOpen:false, questionOpen:false,
   q:'', cat:'Todos', loading:true, busy:false, openFaq:null,
-  user:null, books:[], library:[], cart:[], reviews:[], apiQuestions:[], newQ:'', newReview:{rating:5,comment:''},
+  user:null, books:[], library:[], orders:[], pix:null, pixOpen:false, cart:[], reviews:[], apiQuestions:[], newQ:'', newReview:{rating:5,comment:''},
   form:{name:'',email:'',password:''}, toast:{show:false,msg:''},
   staticFaqs:[
     {question:'Como leio um livro depois de comprar?',answer:'Ele aparece na aba "Minha Biblioteca". Basta clicar em "Ler agora".'},
     {question:'Preciso de conta para comprar?',answer:'Sim. Seus livros ficam vinculados à sua conta, então você pode lê-los sempre que entrar.'},
-    {question:'Posso comprar o mesmo livro duas vezes?',answer:'Não. Depois de comprado, o livro fica na sua biblioteca para sempre.'}],
+    {question:'Posso comprar o mesmo livro duas vezes?',answer:'Não. Depois de comprado, o livro fica na sua biblioteca para sempre.'},
+    {question:'Quanto tempo leva para liberar o livro?',answer:'Assim que nossa equipe confirmar o seu Pix. Você acompanha o status em "Minha Biblioteca", na seção Meus pedidos.'}],
 
   async init(){
     this.cart=Compras.carrinho();
     this.user=await Auth.me();
-    await Promise.all([this.loadBooks(),this.loadReviews(),this.loadQuestions(),this.loadLibrary()]);
+    await Promise.all([this.loadBooks(),this.loadReviews(),this.loadQuestions(),this.loadLibrary(),this.loadOrders()]);
     this.cart=this.cart.filter(c=>this.books.some(b=>b.id===c.id)&&!this.owned(c)); Compras.salvar(this.cart);
     this.loading=false;
   },
   async loadBooks(){ try{ this.books=await Compras.listarLivros(); }catch(e){ this.notify(e.message); } },
   async loadReviews(){ try{ this.reviews=await Avaliacoes.listar(); }catch{} },
   async loadQuestions(){ try{ this.apiQuestions=await Avaliacoes.listarDuvidas(); }catch{} },
+  async loadOrders(){ if(!this.user){ this.orders=[]; return; } try{ this.orders=await Compras.meusPedidos(); }catch{} },
   async loadLibrary(){ if(!this.user){ this.library=[]; return; } try{ this.library=await Compras.minhaBiblioteca(); }catch{} },
 
   get tabs(){ const t=[{id:'home',label:'Início',icon:'fa-house'},{id:'catalog',label:'Acervo / Catálogo',icon:'fa-book-open'}];
@@ -271,9 +293,14 @@ function storeApp(){return{
   async checkout(){
     if(!this.user){ this.cartOpen=false; return this.openAuth('login'); }
     this.busy=true;
-    try{ await Compras.finalizar(this.cart); this.cart=[]; await this.loadLibrary(); this.cartOpen=false; this.tab='library'; this.notify('Compra concluída! Seus livros já estão na biblioteca.'); }
+    try{ const p=await Compras.finalizar(this.cart); this.cart=[]; this.cartOpen=false; await this.loadOrders(); this.showPix(p); }
     catch(e){ this.notify(e.message); } finally{ this.busy=false; }
   },
+  showPix(o){
+    this.pix=o; this.pixOpen=true;
+    this.$nextTick(()=>{ const el=this.$refs.qr; el.innerHTML=''; if(window.QRCode&&o.pix) new QRCode(el,{text:o.pix,width:200,height:200}); });
+  },
+  copyPix(){ navigator.clipboard.writeText(this.pix.pix).then(()=>this.notify('Código Pix copiado!')).catch(()=>this.notify('Copie o código manualmente.')); },
 
   openAuth(mode){ this.authMode=mode; this.authErr=''; this.authOpen=true; },
   need(fn){ if(!this.user){ this.notify('Entre na sua conta para continuar.'); return this.openAuth('login'); } fn(); },
@@ -281,10 +308,10 @@ function storeApp(){return{
     this.authErr=''; this.busy=true;
     try{ const f=this.form;
       this.user=this.authMode==='login'?await Auth.login(f.email,f.password):await Auth.register(f.name,f.email,f.password);
-      this.authOpen=false; this.form={name:'',email:'',password:''}; await this.loadLibrary(); this.notify('Bem-vindo(a), '+this.user.name+'!');
+      this.authOpen=false; this.form={name:'',email:'',password:''}; await this.loadLibrary(); await this.loadOrders(); this.notify('Bem-vindo(a), '+this.user.name+'!');
     }catch(e){ this.authErr=e.message; } finally{ this.busy=false; }
   },
-  logout(){ Auth.logout(); this.user=null; this.library=[]; if(this.tab==='library') this.tab='home'; this.notify('Sessão encerrada.'); },
+  logout(){ Auth.logout(); this.user=null; this.library=[]; this.orders=[]; if(this.tab==='library') this.tab='home'; this.notify('Sessão encerrada.'); },
 
   async submitReview(){
     this.busy=true;
