@@ -23,5 +23,7 @@ const Compras = {
   meusPedidos() { return Api.req('/orders/mine', { tipo: 'user' }); },
 
   // Somente administrador
-  todosPedidos() { return Api.req('/orders', { tipo: 'admin' }); }
+  todosPedidos() { return Api.req('/orders', { tipo: 'admin' }); },
+  // action: 'confirmar' (Pix recebido, libera os livros) ou 'cancelar'
+  decidirPedido(id, action) { return Api.req('/orders/' + id, { method: 'PATCH', tipo: 'admin', body: { action } }); }
 };
