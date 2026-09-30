@@ -75,13 +75,17 @@ tailwind.config={theme:{extend:{colors:{parchment:{50:'#FAF7F2',100:'#F3ECE0'},w
   </div>
 
   <div x-show="aba==='pedidos'" class="bg-white border border-wood-200 rounded-2xl p-5 overflow-x-auto">
-    <p class="text-sm font-bold mb-3">Faturamento: <span class="text-amber-800" x-text="moeda(pedidos.reduce((s,p)=>s+Number(p.total),0))"></span></p>
+    <p class="text-sm font-bold mb-3">Faturamento: <span class="text-amber-800" x-text="moeda(pedidos.filter(p=>p.status==='pago').reduce((s,p)=>s+Number(p.total),0))"></span></p>
     <table class="w-full text-xs text-left">
-      <thead class="bg-wood-900 text-amber-100"><tr><th class="p-3">Pedido</th><th class="p-3">Cliente</th><th class="p-3">Data</th><th class="p-3">Total</th></tr></thead>
+      <thead class="bg-wood-900 text-amber-100"><tr><th class="p-3">Pedido</th><th class="p-3">Cliente</th><th class="p-3">Data</th><th class="p-3">Total</th><th class="p-3">Status</th><th class="p-3"></th></tr></thead>
       <tbody class="divide-y divide-wood-200">
         <template x-for="p in pedidos" :key="p.id"><tr>
           <td class="p-3 font-bold" x-text="'#'+p.id"></td><td class="p-3" x-text="p.customerName"></td>
           <td class="p-3" x-text="new Date(p.created_at).toLocaleDateString('pt-BR')"></td><td class="p-3 font-bold" x-text="moeda(p.total)"></td>
+          <td class="p-3 font-semibold" :class="p.status==='pago'?'text-emerald-700':p.status==='pendente'?'text-amber-800':'text-rose-700'" x-text="p.status"></td>
+          <td class="p-3 text-right whitespace-nowrap"><template x-if="p.status==='pendente'"><span>
+            <button @click="decidir(p.id,'confirmar')" class="font-bold text-emerald-700">Confirmar Pix</button>
+            <button @click="decidir(p.id,'cancelar')" class="font-bold text-rose-700 ml-3">Cancelar</button></span></template></td>
         </tr></template>
       </tbody>
     </table>
@@ -122,6 +126,12 @@ function adminApp(){return{
       this.f={title:'',author:'',category:'Ficção',price:'',synopsis:''}; this.$refs.capa.value=''; this.$refs.arquivo.value='';
       this.livros=await Compras.listarLivros(); this.aviso('Livro salvo.');
     }catch(e){ this.aviso(e.message); }
+  },
+  async decidir(id,action){
+    if(!confirm(action==='confirmar'?'Confirmar que o Pix deste pedido foi recebido?':'Cancelar este pedido?')) return;
+    try{ await Compras.decidirPedido(id,action); this.pedidos=await Compras.todosPedidos();
+      this.aviso(action==='confirmar'?'Pagamento confirmado. Livros liberados.':'Pedido cancelado.'); }
+    catch(e){ this.aviso(e.message); }
   },
   async excluir(id){
     if(!confirm('Excluir este livro?')) return;
